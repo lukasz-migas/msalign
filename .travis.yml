@@ -2,7 +2,7 @@ dist: trusty
 language: python
 python:
   - "2.7"
-  - "3.3"
+  - "3.5"
   - "3.6"
 
 matrix:
@@ -30,5 +30,4 @@ script:
   - SRC_DIR=$(pwd)
   - echo $SRC_DIR
   - ls || dir
-  - cd msalign
   - python3 msalign/__init__.py || python msalign/__init__.py
