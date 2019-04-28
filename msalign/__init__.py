@@ -1,8 +1,11 @@
 """Signal calibration and alignment by reference peaks - copy of MSALIGN function from MATLAB bioinformatics library."""
+from __future__ import division
 import numpy as np
 import scipy.interpolate as interpolate
 
 METHODS = ["pchip", "zero", "slinear", "quadratic", "cubic"]
+
+__all__ = ["msalign"]
 
 
 def msalign(xvals, zvals, peaks, **kwargs):
@@ -154,9 +157,8 @@ def msalign(xvals, zvals, peaks, **kwargs):
         np.divide(np.arange(0, grid_steps), grid_steps - 1),
     )
     search_space = np.tile(
-        np.vstack([A.flatten(order="F"),
-                   B.flatten(order="F")]).T,
-        [1, iterations])
+        np.vstack([A.flatten(order="F"), B.flatten(order="F")]).T, [1, iterations]
+    )
 
     # iterate for every signal
     for n_signal in range(n_signals):
@@ -172,15 +174,10 @@ def msalign(xvals, zvals, peaks, **kwargs):
         # the function instantiation is by far the slowest step, hence we want to
         # minimise the number of times this is performed
         if method == "pchip":
-            f = interpolate.PchipInterpolator(
-                xvals,
-                zvals[n_signal])
+            f = interpolate.PchipInterpolator(xvals, zvals[n_signal])
         else:
             f = interpolate.interp1d(
-                xvals,
-                zvals[n_signal],
-                method,
-                bounds_error=False, fill_value=0
+                xvals, zvals[n_signal], method, bounds_error=False, fill_value=0
             )
 
         for n_iter in range(iterations):  # increase for better resolution
@@ -232,6 +229,7 @@ def msalign(xvals, zvals, peaks, **kwargs):
 
 if __name__ == "__main__":
     from time import time as ttime
+
     # MATLAB test dataset
     peaks = [3991.4, 4598, 7964, 9160]
     kwargs = dict(
@@ -243,7 +241,7 @@ if __name__ == "__main__":
         shift_range=[-100, 100],
     )
 
-    fname = r"msalign_test_data.csv"
+    fname = r"./example_data/msalign_test_data.csv"
     data = np.genfromtxt(fname, delimiter=",")
     xvals = data[1:, 0]
     yvals = data[0, 1:]
