@@ -23,7 +23,7 @@ matrix:
       language: shell       # 'language: python' is an error on Travis CI Windows
       before_install: choco install python
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
-    - name: "TEST=flake"
+    - name: TEST=flake
       os: linux
   allow_failures:
     - env: TEST=flake
