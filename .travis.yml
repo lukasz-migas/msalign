@@ -22,7 +22,7 @@ matrix:
     env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
   - name: TEST=flake
     os: linux
-    python: 3.7
+    python: 3.6
   allow_failures:
   - env: TEST=flake
 install:
