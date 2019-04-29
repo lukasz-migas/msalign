@@ -21,4 +21,3 @@ def test_import_msalign():
         success = False
 
     assert success
-

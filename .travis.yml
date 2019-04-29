@@ -25,6 +25,8 @@ matrix:
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
     - name: "TEST=flake"
       os: linux
+  allow_failures:
+    - env: TEST=flake
 
 install: 
   - pip install --upgrade pip || pip3 install --upgrade pip # all three OSes agree about 'pip3'
