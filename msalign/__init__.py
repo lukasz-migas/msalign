@@ -1,11 +1,39 @@
 """Signal calibration and alignment by reference peaks - copy of MSALIGN function from MATLAB bioinformatics library."""
 from __future__ import division
+
 import numpy as np
 import scipy.interpolate as interpolate
 
 METHODS = ["pchip", "zero", "slinear", "quadratic", "cubic"]
 
 __all__ = ["msalign"]
+
+
+def __check_xy(xvals, zvals):
+    """
+    Check zvals input
+
+    Parameters
+    ----------
+    xvals: numpy array
+        1D array of separation units (N). The number of elements of xvals must equal the number of elements of
+        zvals.shape[1]
+    zvals: numpy array
+        2D array of intensities that must have common separation units (M x N) where M is the number of vectors
+        and N is number of points in the vector
+
+    Returns
+    -------
+    zvals: numpy array
+        2D array that should match the dimensions of xvals input
+    """
+    if xvals.shape[0] != zvals.shape[1]:
+        if xvals.shape[0] != zvals.shape[0]:
+            raise ValueError("Dimensions mismatch")
+        zvals = zvals.T
+        print("Rotated zvals to match xvals input")
+
+    return zvals
 
 
 def msalign(xvals, zvals, peaks, **kwargs):
@@ -26,7 +54,6 @@ def msalign(xvals, zvals, peaks, **kwargs):
     Spectrometry. In Systems Bioinformatics: An Engineering Case-Based Approach, G. Alterovitz and M.F. Ramoni, eds.
     Artech House Publishers).
     MSALIGN: https://nl.mathworks.com/help/bioinfo/ref/msalign.html
-
 
     Parameters
     ----------
@@ -56,12 +83,16 @@ def msalign(xvals, zvals, peaks, **kwargs):
         number of steps to be used in the grid search. Default: 20
     shift_range: list / numpy array (optional)
         maximum allowed shifts. Default: [-100, 100]
+    only_shift: bool
+        determines if signal should be shifted (True) or rescaled (False). Default: True
 
     Returns
     -------
     zvals_out: numpy array
         calibrated array
     """
+    # check input
+    zvals = __check_xy(xvals, zvals)
     n_signals = zvals.shape[0]
 
     # interpolation method
@@ -85,13 +116,14 @@ def msalign(xvals, zvals, peaks, **kwargs):
     P = peaks
     n_peaks = len(P)
 
-    only_shift = False
+    only_shift = kwargs.get("only_shift", True)
     if n_peaks == 1:
         only_shift = True
 
     # weights
     W = kwargs.get("weights", np.ones(len(P)))
 
+    # check user-specified parameters
     if method not in METHODS:
         raise ValueError(
             "Method `{}` not found in the method options: {}".format(method, METHODS)
@@ -113,6 +145,8 @@ def msalign(xvals, zvals, peaks, **kwargs):
         raise ValueError("Value of 'grid_steps' must be above 0!")
     if gaussian_resolution <= 0:
         raise ValueError("Value of 'resolution' must be above 0!")
+    if not isinstance(only_shift, bool):
+        raise ValueError("Value of 'only_shift' must be a boolean")
 
     # check that values for gaussian_width are valid
     G = np.zeros((n_peaks, 1))
@@ -246,6 +280,7 @@ if __name__ == "__main__":
     xvals = data[1:, 0]
     yvals = data[0, 1:]
     zvals = data[1:, 1:].T
+    print(xvals.shape, zvals.shape)
 
     for method in ["pchip", "zero", "slinear", "quadratic", "cubic"]:
         kwargs.update(dict(method=method))
