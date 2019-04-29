@@ -2,18 +2,18 @@
 #
 # Copyright (C) 2019 Lukasz Migas
 
+VERSION = "0.0.3"
 DESCRIPTION = "msalign: Signal calibration and alignment by reference peaks"
-LONG_DESCRIPTION = """\
-"""
+
+with open("README.md") as f:
+    LONG_DESCRIPTION = f.read()
 
 DISTNAME = "msalign"
 MAINTAINER = "Lukasz Migas"
 MAINTAINER_EMAIL = "lukas.migas@yahoo.com"
-# URL = ''
+URL = "https://github.com/lukasz-migas/msalign"
 LICENSE = "Apache license 2.0"
 DOWNLOAD_URL = "https://github.com/lukasz-migas/msalign"
-VERSION = "0.0.1"
-
 INSTALL_REQUIRES = ["numpy>=1.9.3", "scipy>=0.14.0"]
 
 PACKAGES = ["msalign"]
@@ -48,8 +48,9 @@ if __name__ == "__main__":
         maintainer_email=MAINTAINER_EMAIL,
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
+        long_description_content_type="text/markdown",
         license=LICENSE,
-        # url=URL,
+        url=URL,
         version=VERSION,
         download_url=DOWNLOAD_URL,
         install_requires=INSTALL_REQUIRES,

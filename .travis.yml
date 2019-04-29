@@ -33,3 +33,7 @@ script:
   - echo $SRC_DIR
   - ls || dir
   - python3 msalign/__init__.py || python msalign/__init__.py
+
+
+  notifications:
+    email: false

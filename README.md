@@ -1,15 +1,24 @@
 # msalign - signal calibration and alignment
 
-This package was inspired by MATLAB's [msalign](https://nl.mathworks.com/help/bioinfo/ref/msalign.html) function which
+[![Build Status](https://travis-ci.com/lukasz-migas/msalign.svg?branch=master)](https://travis-ci.com/lukasz-migas/msalign)
+
+This package was inspired by MATLAB's [msalign](https://mathworks.com/help/bioinfo/ref/msalign.html) function which
 allows alignment of multiple signals to reference peaks.
 
 ## Installation
+
+```python
+pip install msalign
+```
+
+or
 
 ```python
 pip install git+https://github.com/lukasz-migas/msalign.git
 ```
 
 ## Usage
+
 Usage is relatively straightforward. Simply import the function `msalign` from the package and provide `xvals`, `zvals`
 and `peaks`. Other parameters can be passed-in using `kwargs`.
 
@@ -35,3 +44,11 @@ kwargs = dict(
 
 zvals_new = msalign(xvals, zvals, peaks, **kwargs)
 ```
+
+## Reference
+
+Monchamp, P., Andrade-Cetto, L., Zhang, J.Y., and Henson, R. (2007) Signal Processing Methods for Mass
+Spectrometry. In Systems Bioinformatics: An Engineering Case-Based Approach, G. Alterovitz and M.F. Ramoni, eds.
+Artech House Publishers).
+
+[MATLAB's msalign](https://mathworks.com/help/bioinfo/ref/msalign.html)
