@@ -280,7 +280,6 @@ if __name__ == "__main__":
     xvals = data[1:, 0]
     yvals = data[0, 1:]
     zvals = data[1:, 1:].T
-    print(xvals.shape, zvals.shape)
 
     for method in ["pchip", "zero", "slinear", "quadratic", "cubic"]:
         kwargs.update(dict(method=method))

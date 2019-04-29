@@ -1,51 +1,48 @@
 dist: trusty
 language: python
-
 cache:
   pip: true
-
 python:
-  - "2.7"
-  - "3.5"
-  - "3.6"
- 
+- '2.7'
+- '3.5'
+- '3.6'
 matrix:
   include:
-    - name: "Python 3.7.1 on Xenial Linux"
-      python: 3.7           # this works for Linux but is ignored on macOS or Windows
-      dist: xenial          # required for Python >= 3.7
-    - name: "Python 3.7.2 on macOS"
-      os: osx
-      osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
-      language: shell       # 'language: python' is an error on Travis CI macOS
-    - name: "Python 3.7.3 on Windows"
-      os: windows           # Windows 10.0.17134 N/A Build 17134
-      language: shell       # 'language: python' is an error on Travis CI Windows
-      before_install: choco install python
-      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
-    - name: TEST=flake
-      os: linux
+  - name: Python 3.7.1 on Xenial Linux
+    python: 3.7
+    dist: xenial
+  - name: Python 3.7.2 on macOS
+    os: osx
+    osx_image: xcode10.2
+    language: shell
+  - name: Python 3.7.3 on Windows
+    os: windows
+    language: shell
+    before_install: choco install python
+    env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+  - name: TEST=flake
+    os: linux
+    python: 3.7
   allow_failures:
-    - env: TEST=flake
-
+  - env: TEST=flake
 install:
-  - pip install --upgrade pip || pip3 install --upgrade pip # all three OSes agree about 'pip3'
-  - pip install -r requirements.txt
-  - pip install git+https://github.com/lukasz-migas/msalign.git
-  - if [[ "${TEST}" == "flake" ]]; then
-    pip install flake8;
-    fi;
-
-# 'python' points to Python 2.7 on macOS but points to Python 3.7 on Linux and Windows
-# 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
+- pip install --upgrade pip || pip3 install --upgrade pip
+- pip install -r requirements.txt
+- pip install git+https://github.com/lukasz-migas/msalign.git
+- if [[ "${TEST}" == "flake" ]]; then pip install flake8; fi;
 script:
-  - SRC_DIR=$(pwd)
-  - echo $SRC_DIR
-  - ls || dir
-  - python3 msalign/__init__.py || python msalign/__init__.py
-  - if [[ "${TEST}" == "flake" ]]; then
-    flake8;
-    fi;
+- SRC_DIR=$(pwd)
+- echo $SRC_DIR
+- ls || dir
+- python3 msalign/__init__.py || python msalign/__init__.py
+- if [[ "${TEST}" == "flake" ]]; then flake8; fi;
 
 notifications:
   email: false
+deploy:
+  provider: pypi
+  user: lukasz-migas
+  password:
+    secure: ZPeJTWVZ2jfBTATn4Pa8jkYqo83aP8hzf5JaE/dtkOLdcAEKiqwNz3hUc4mTSuwGD3wMCWjsQC0UICQjYeA+evOn/styjcGX4iHJ4I985FmkjdjYkl2NUA4uR3jq1KYRuCy57zdN3vJc9y/eJL9w5s65erwk2oI2KXmKhNTNEu5pHL9HzVLy+s4HWdJimLnIL7LHJbg76DBVRSB6Y2dED/M6RWu1D99Xaw3d7CA5fC5X/ysRo3R6j0X0sV9yt1HMHSig1/kUSMrGEEbvPfREWMSwYDzP+Ezv/EfeCLjLiPU1SLDdAMIbiV4M+SU013W0nuM08yzRx5sMyd5qeKER9RvVE0z+Hf49aH2X3gq4tEY+GL3onPeI5wVO66jFsyaHasHtZSvOQyRGJE0HwX/a1jucGNsKUxO4UXrG4ax16JMH6G+bExMj/M7gid0KY/lu4o8bKsKN4cM4jqrBchG4VDCV0SnhqYOJTiEV+n01/psMxlrfCpKlZecZYsvZ0yeTJmZ96m6I3OsoCzNzB05lMCPfJg3oQZ5x09d0lY2nJoH1hrkZqIn65VeQ7kVYHIj0xJz1FCs5CRMeGg3nwhfeabFjxHaZAuT+7jnPH9Xi4Ztd9x+kWWSCrFhb3/id9VvxeWwT2HD/+oU3c4+qAFOXhGxEomODmifx/zW4t96pkwM=
+  distributions: "sdist bdist_wheel --universal"
+  skip_existing: true
