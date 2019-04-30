@@ -8,24 +8,34 @@ python:
 - '3.6'
 matrix:
   include:
+  # linux - 3.7
   - name: Image=Linux_37
     python: 3.7
     dist: xenial
+  # macOS - 3.7
   - name: Image=macOS_37
     os: osx
     osx_image: xcode10.2
     language: shell
+    env: Image=macOS_37
+  # windows10 - 3.7
   - name: Image=Win10_37
     os: windows
     language: shell
     before_install: choco install python
-    env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+    env: 
+      - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+      - Image=Win10_37
+  # flake8
   - name: TEST=flake
     os: linux
     python: 3.6
+    env: TEST=flake
+    # coverage
   - name: TEST=coverage
     os: linux
     python: 3.6
+    env: TEST=coverage
   allow_failures:
   - env: 
     - TEST=flake
@@ -40,6 +50,10 @@ install:
     pip install flake8;
   elif [ "${TEST}" == "coverage" ]; then
     pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold;
+  elif [ "${Image}" == "macOS_37" ]; then
+    - pip install twine
+  elif [ "${Image}" == "Win10_37" ]; then
+    - pip install twine setuptools wheel
   fi;
 
 script:
@@ -55,6 +69,11 @@ script:
 
 notifications:
   email: false
+
+after_success:
+- if [ "${TEST}" == "coverage" ]; then
+    codecov --token=2f868dd3-c8ec-4889-8be0-c487ec37fc9e;
+  fi
 
 deploy:
   provider: pypi
