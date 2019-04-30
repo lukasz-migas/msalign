@@ -49,11 +49,11 @@ install:
 - if [[ "${TEST}" == "flake" ]]; then 
     pip install flake8;
   elif [ "${TEST}" == "coverage" ]; then
-    pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold;
+    pip install codecov pytest>=3.6 pytest-cov pytest-sugar pytest-travis-fold;
   elif [ "${Image}" == "macOS_37" ]; then
-    - pip install twine;
+    pip install twine;
   elif [ "${Image}" == "Win10_37" ]; then
-    - pip install twine setuptools wheel;
+    pip install twine setuptools wheel;
   fi;
 
 script:
