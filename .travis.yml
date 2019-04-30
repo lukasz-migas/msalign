@@ -17,31 +17,37 @@ matrix:
     os: osx
     osx_image: xcode10.2
     language: shell
-    # env: Image=macOS_37
   # windows10 - 3.7
-  # - name: Image=Win10_37
   - env: 
-      - PATH=/c/Python37:/c/Python37/Scripts:$PATH
-      - Image=Win10_37
+    - Image=Win10_37
+    - PATH=/c/Python37:/c/Python37/Scripts:$PATH
     os: windows
     language: shell
     before_install: choco install python
-
   # flake8
   - env: TEST=flake
     os: linux
     python: 3.6
-    # env: TEST=flake
     # coverage
   - env: TEST=coverage
     os: linux
     python: 3.6
-    # env: TEST=coverage
   allow_failures:
-  - env: TEST=flake TEST=coverage Image=Win10_37
-    # - TEST=flake
-    # - TEST=coverage
-    # - Image=Win10_37
+  # flake8
+  - env: TEST=flake
+    os: linux
+    python: 3.6
+    # coverage
+  - env: TEST=coverage
+    os: linux
+    python: 3.6
+  # windows10 - 3.7
+  - env: 
+    - Image=Win10_37
+    - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+    os: windows
+    language: shell
+    before_install: choco install python
 
 install:
 - pip install --upgrade pip || pip3 install --upgrade pip
