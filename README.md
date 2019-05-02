@@ -1,6 +1,11 @@
 # msalign - signal calibration and alignment
 
 [![Build Status](https://travis-ci.com/lukasz-migas/msalign.svg?branch=master)](https://travis-ci.com/lukasz-migas/msalign)
+[![codecov](https://codecov.io/gh/lukasz-migas/msalign/branch/master/graph/badge.svg)](https://codecov.io/gh/lukasz-migas/msalign)
+[![Requirements Status](https://requires.io/github/lukasz-migas/msalign/requirements.svg?branch=master)](https://requires.io/github/lukasz-migas/msalign/requirements/?branch=master)
+
+[![Wheel](https://img.shields.io/pypi/wheel/msalign.svg)](https://pypi.org/project/msalign/)
+[![Versions](https://img.shields.io/pypi/pyversions/msalign.svg)](https://pypi.org/project/msalign/)
 
 This package was inspired by MATLAB's [msalign](https://mathworks.com/help/bioinfo/ref/msalign.html) function which
 allows alignment of multiple signals to reference peaks.
@@ -34,11 +39,11 @@ zvals = data[1:, 1:].T
 
 peaks = [3991.4, 4598, 7964, 9160]
 kwargs = dict(
-    iterations=5, 
-    weights=[60, 100, 60, 100], 
-    resolution=100, 
-    grid_steps=20, 
-    ratio=2.5, 
+    iterations=5,
+    weights=[60, 100, 60, 100],
+    resolution=100,
+    grid_steps=20,
+    ratio=2.5,
     shift_range=[-100, 100],
     )
 

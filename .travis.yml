@@ -18,7 +18,7 @@ matrix:
     osx_image: xcode10.2
     language: shell
   # windows10 - 3.7
-  - env: 
+  - env:
     - Image=Win10_37
     - PATH=/c/Python37:/c/Python37/Scripts:$PATH
     os: windows
@@ -42,7 +42,7 @@ matrix:
     os: linux
     python: 3.6
   # windows10 - 3.7
-  - env: 
+  - env:
     - Image=Win10_37
     - PATH=/c/Python37:/c/Python37/Scripts:$PATH
     os: windows
@@ -53,7 +53,7 @@ install:
 - pip install --upgrade pip || pip3 install --upgrade pip
 - pip install -r requirements.txt
 - pip install git+https://github.com/lukasz-migas/msalign.git
-- if [[ "${TEST}" == "flake" ]]; then 
+- if [[ "${TEST}" == "flake" ]]; then
     pip install flake8;
   elif [ "${TEST}" == "coverage" ]; then
     pip install codecov pytest==3.6 pytest-cov pytest-sugar pytest-travis-fold;
@@ -68,7 +68,7 @@ script:
 - echo $SRC_DIR
 - ls || dir
 - python3 msalign/__init__.py || python msalign/__init__.py
-- if [[ "${TEST}" == "flake" ]]; then 
+- if [[ "${TEST}" == "flake" ]]; then
     flake8;
   elif [[ "${TEST}" == "coverage" ]]; then
     py.test --cov;
