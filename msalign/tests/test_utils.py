@@ -3,7 +3,7 @@
 from msalign import generate_function, check_xy
 import scipy.interpolate as interpolate
 import numpy as np
-from numpy.testing import assert_equal
+from numpy.testing import assert_equal, assert_raises
 
 
 class Test_generate_function(object):
@@ -36,3 +36,9 @@ class Test_check_xy(object):
         zvals_in = np.random.randint(0, 100, (10, 20))
         zvals_out = check_xy(xvals, zvals_in)
         assert_equal(zvals_in.T, zvals_out)
+
+    @staticmethod
+    def test_check_xy_invalid(self):
+        xvals = np.arange(10)
+        zvals_in = np.random.randint(0, 100, (11, 20))
+        assert_raises(ValueError, check_xy(xvals, zvals_in))
