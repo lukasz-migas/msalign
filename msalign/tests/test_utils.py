@@ -10,12 +10,12 @@ class Test_generate_function(object):
     """Test generate_function"""
 
     @staticmethod
-    def test_generate_function_pchip(self):
+    def test_generate_function_pchip():
         f = generate_function("pchip", [1, 2, 3], [3, 2, 1])
         assert isinstance(f, interpolate.PchipInterpolator)
 
     @staticmethod
-    def test_generate_function_interp1d(self):
+    def test_generate_function_interp1d():
         f = generate_function("zero", [1, 2, 3], [3, 2, 1])
         assert isinstance(f, interpolate.interp1d)
 
@@ -24,21 +24,21 @@ class Test_check_xy(object):
     """Test check_xy"""
 
     @staticmethod
-    def test_check_xy_correct(self):
+    def test_check_xy_correct():
         xvals = np.arange(10)
         zvals_in = np.random.randint(0, 100, (20, 10))
         zvals_out = check_xy(xvals, zvals_in)
         assert_equal(zvals_in, zvals_out)
 
     @staticmethod
-    def test_check_xy_incorrect(self):
+    def test_check_xy_incorrect():
         xvals = np.arange(10)
         zvals_in = np.random.randint(0, 100, (10, 20))
         zvals_out = check_xy(xvals, zvals_in)
         assert_equal(zvals_in.T, zvals_out)
 
     @staticmethod
-    def test_check_xy_invalid(self):
+    def test_check_xy_invalid():
         xvals = np.arange(10)
         zvals_in = np.random.randint(0, 100, (11, 20))
         assert_raises(ValueError, check_xy(xvals, zvals_in))
