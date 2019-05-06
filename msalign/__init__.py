@@ -6,10 +6,10 @@ import scipy.interpolate as interpolate
 
 METHODS = ["pchip", "zero", "slinear", "quadratic", "cubic"]
 
-__all__ = ["msalign", "__check_xy", "__generate_function"]
+__all__ = ["msalign", "check_xy", "generate_function"]
 
 
-def __check_xy(xvals, zvals):
+def check_xy(xvals, zvals):
     """
     Check zvals input
 
@@ -36,7 +36,7 @@ def __check_xy(xvals, zvals):
     return zvals
 
 
-def __generate_function(method, xvals, yvals):
+def generate_function(method, xvals, yvals):
     """
     Generate interpolation function
 
@@ -119,7 +119,7 @@ def msalign(xvals, zvals, peaks, **kwargs):
         calibrated array
     """
     # check input
-    zvals = __check_xy(xvals, zvals)
+    zvals = check_xy(xvals, zvals)
     n_signals = zvals.shape[0]
 
     # interpolation method
@@ -237,7 +237,7 @@ def msalign(xvals, zvals, peaks, **kwargs):
         # TIP: because instatiation of the function is very slow, the increase of number of iterations has negligible
         # effect of the overall timing of the function. Since you are going to spend 100 ms setting the function up
         # it might as well perform as many iterations as possible
-        f = __generate_function(method, xvals, zvals[n_signal])
+        f = generate_function(method, xvals, zvals[n_signal])
 
         for n_iter in range(iterations):  # increase for better resolution
             # scale and shift search space
@@ -266,7 +266,7 @@ def msalign(xvals, zvals, peaks, **kwargs):
     zvals_out = np.zeros_like(zvals)
     for n_signal in range(n_signals):
         # interpolate back to the original domain
-        f = __generate_function(method,
+        f = generate_function(method,
                                 (xvals - shift_opt[n_signal]) / scale_opt[n_signal],
                                 zvals[n_signal])
         zvals_out[n_signal] = f(xvals)
