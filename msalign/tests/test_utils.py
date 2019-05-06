@@ -56,6 +56,8 @@ class Test_msalign(object):
         assert_raises(ValueError, msalign, xvals, zvals, [10], iterations=0)
         assert_raises(TypeError, msalign, xvals, zvals, [10], iterations=1.)
         assert_raises(ValueError, msalign, xvals, zvals, [10], shift_range=[-10])
+        assert_raises(ValueError, msalign, xvals, zvals, [10], shift_range=[10, 10])
         assert_raises(ValueError, msalign, xvals, zvals, [10], ratio=0)
         assert_raises(ValueError, msalign, xvals, zvals, [10], grid_steps=0)
         assert_raises(ValueError, msalign, xvals, zvals, [10], resolution=0)
+        assert_raises(ValueError, msalign, xvals, zvals, [10, 20], only_shift="HelloWorld")
