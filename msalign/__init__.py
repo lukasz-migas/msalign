@@ -267,8 +267,8 @@ def msalign(xvals, zvals, peaks, **kwargs):
     for n_signal in range(n_signals):
         # interpolate back to the original domain
         f = generate_function(method,
-                                (xvals - shift_opt[n_signal]) / scale_opt[n_signal],
-                                zvals[n_signal])
+                              (xvals - shift_opt[n_signal]) / scale_opt[n_signal],
+                              zvals[n_signal])
         zvals_out[n_signal] = f(xvals)
 
     return zvals_out
