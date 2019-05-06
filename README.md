@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.com/lukasz-migas/msalign.svg?branch=master)](https://travis-ci.com/lukasz-migas/msalign)
 [![codecov](https://codecov.io/gh/lukasz-migas/msalign/branch/master/graph/badge.svg)](https://codecov.io/gh/lukasz-migas/msalign)
 [![Requirements Status](https://requires.io/github/lukasz-migas/msalign/requirements.svg?branch=master)](https://requires.io/github/lukasz-migas/msalign/requirements/?branch=master)
+[![CodeFactor](https://www.codefactor.io/repository/github/lukasz-migas/msalign/badge)](https://www.codefactor.io/repository/github/lukasz-migas/msalign)
 
 [![Wheel](https://img.shields.io/pypi/wheel/msalign.svg)](https://pypi.org/project/msalign/)
 [![Versions](https://img.shields.io/pypi/pyversions/msalign.svg)](https://pypi.org/project/msalign/)

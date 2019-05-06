@@ -116,3 +116,6 @@ dmypy.json
 # user defined
 COMMANDS
 .vscode/
+.project
+.pydevproject
+.settings/org.eclipse.ltk.core.refactoring.prefs

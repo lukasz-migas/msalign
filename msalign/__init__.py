@@ -6,7 +6,7 @@ import scipy.interpolate as interpolate
 
 METHODS = ["pchip", "zero", "slinear", "quadratic", "cubic"]
 
-__all__ = ["msalign"]
+__all__ = ["msalign", "__check_xy", "__generate_function"]
 
 
 def __check_xy(xvals, zvals):
@@ -34,6 +34,33 @@ def __check_xy(xvals, zvals):
         print("Rotated zvals to match xvals input")
 
     return zvals
+
+
+def __generate_function(method, xvals, yvals):
+    """
+    Generate interpolation function
+
+    Parameters
+    ----------
+    method: str
+    xvals: np.array
+        1D array of seperation units (N)
+    yvals: numpy array
+        1D array of intensity values (N)
+
+    Returns
+    -------
+    f: scipy interpolator
+        interpolation function
+    """
+    if method == "pchip":
+        f = interpolate.PchipInterpolator(xvals, yvals)
+    else:
+        f = interpolate.interp1d(
+            xvals, yvals, method, bounds_error=False, fill_value=0
+        )
+
+    return f
 
 
 def msalign(xvals, zvals, peaks, **kwargs):
@@ -171,7 +198,7 @@ def msalign(xvals, zvals, peaks, **kwargs):
     corr_sig_y = corr_sig_y.flatten("F")
 
     # set reduce_range_factor to take 5 points of the previous ranges or half of
-    # the previous range if grid_steps<10
+    # the previous range if grid_steps < 10
     reduce_range_factor = min(0.5, 5 / grid_steps)
 
     # set scl such that the maximum peak can shift no more than the
@@ -196,9 +223,9 @@ def msalign(xvals, zvals, peaks, **kwargs):
 
     # iterate for every signal
     for n_signal in range(n_signals):
-        # Main loop: searches for optimum values for the Scale and Shift
-        # factors by exhaustive search over a multiresolution grid, getting
-        # finer at every iteration.
+        # main loop: searches for the optimum values of Scale and Shift factors by search over a multi-resolution
+        # grid, getting better at each iteration. Increasing the number of iterations improves the shift and scale
+        # parameters
 
         # set to back to the user input arguments (or default)
         shft = shift_range
@@ -207,12 +234,10 @@ def msalign(xvals, zvals, peaks, **kwargs):
         # generate the interpolation function early on to save time
         # the function instantiation is by far the slowest step, hence we want to
         # minimise the number of times this is performed
-        if method == "pchip":
-            f = interpolate.PchipInterpolator(xvals, zvals[n_signal])
-        else:
-            f = interpolate.interp1d(
-                xvals, zvals[n_signal], method, bounds_error=False, fill_value=0
-            )
+        # TIP: because instatiation of the function is very slow, the increase of number of iterations has negligible
+        # effect of the overall timing of the function. Since you are going to spend 100 ms setting the function up
+        # it might as well perform as many iterations as possible
+        f = __generate_function(method, xvals, zvals[n_signal])
 
         for n_iter in range(iterations):  # increase for better resolution
             # scale and shift search space
@@ -220,8 +245,7 @@ def msalign(xvals, zvals, peaks, **kwargs):
             B = shft[0] + search_space[:, (n_iter * 2) + 1] * np.diff(shft)
             temp = (
                 np.reshape(A, (A.shape[0], 1))
-                * np.reshape(corr_sig_x, (1, corr_sig_x.shape[0]))
-                + np.tile(B, [corr_sig_l, 1]).T
+                * np.reshape(corr_sig_x, (1, corr_sig_x.shape[0])) + np.tile(B, [corr_sig_l, 1]).T
             )
             temp = f(temp.flatten("C")).reshape((temp.shape))
             imax = np.dot(temp, corr_sig_y).argmax()
@@ -232,31 +256,20 @@ def msalign(xvals, zvals, peaks, **kwargs):
 
             # readjust grid for next iteration
             scl = (
-                scale_opt[n_signal]
-                + np.array([-0.5, 0.5]) * np.diff(scl) * reduce_range_factor
+                scale_opt[n_signal] + np.array([-0.5, 0.5]) * np.diff(scl) * reduce_range_factor
             )
             shft = (
-                shift_opt[n_signal]
-                + np.array([-0.5, 0.5]) * np.diff(shft) * reduce_range_factor
+                shift_opt[n_signal] + np.array([-0.5, 0.5]) * np.diff(shft) * reduce_range_factor
             )
 
+    # return results
     zvals_out = np.zeros_like(zvals)
     for n_signal in range(n_signals):
         # interpolate back to the original domain
-        if method == "pchip":
-            zvals_out[n_signal] = interpolate.pchip_interpolate(
-                (xvals - shift_opt[n_signal]) / scale_opt[n_signal],
-                zvals[n_signal],
-                xvals,
-            )
-        else:
-            zvals_out[n_signal] = interpolate.interp1d(
-                (xvals - shift_opt[n_signal]) / scale_opt[n_signal],
-                zvals[n_signal],
-                method,
-                bounds_error=False,
-                fill_value=0,
-            )(xvals)
+        f = __generate_function(method,
+                                (xvals - shift_opt[n_signal]) / scale_opt[n_signal],
+                                zvals[n_signal])
+        zvals_out[n_signal] = f(xvals)
 
     return zvals_out
 
@@ -272,7 +285,7 @@ if __name__ == "__main__":
         resolution=100,
         grid_steps=20,
         ratio=2.5,
-        shift_range=[-100, 100],
+        shift_range=[-5, 5],
     )
 
     fname = r"./example_data/msalign_test_data.csv"
