@@ -168,6 +168,8 @@ def msalign(xvals, zvals, peaks, **kwargs):
         raise ValueError("Value of 'ratio' must be above 0!")
     if iterations <= 0:
         raise ValueError("Value of 'iterations' must be above 0!")
+    if isinstance(iterations, float):
+        raise TypeError("Value of 'iterations' must be an integer")
     if grid_steps <= 0:
         raise ValueError("Value of 'grid_steps' must be above 0!")
     if gaussian_resolution <= 0:
