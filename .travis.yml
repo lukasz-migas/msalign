@@ -7,6 +7,7 @@ python:
 - '3.5'
 - '3.6'
 matrix:
+  # jobs
   include:
   # linux - 3.7
   - env: Image=Linux_37
@@ -32,6 +33,7 @@ matrix:
   - env: TEST=coverage
     os: linux
     python: 3.6
+  # allow failures
   allow_failures:
   # flake8
   - env: TEST=flake

@@ -54,7 +54,7 @@ def generate_function(method, xvals, yvals):
         interpolation function
     """
     if method == "pchip":
-        f = interpolate.PchipInterpolator(xvals, yvals)
+        f = interpolate.PchipInterpolator(xvals, yvals, extrapolate=False)
     else:
         f = interpolate.interp1d(
             xvals, yvals, method, bounds_error=False, fill_value=0
@@ -220,7 +220,8 @@ def msalign(xvals, zvals, peaks, **kwargs):
         np.divide(np.arange(0, grid_steps), grid_steps - 1),
     )
     search_space = np.tile(
-        np.vstack([A.flatten(order="F"), B.flatten(order="F")]).T, [1, iterations]
+        np.vstack([A.flatten(order="F"), B.flatten(order="F")]).T,
+        [1, iterations]
     )
 
     # iterate for every signal
@@ -243,13 +244,16 @@ def msalign(xvals, zvals, peaks, **kwargs):
 
         for n_iter in range(iterations):  # increase for better resolution
             # scale and shift search space
-            A = scl[0] + search_space[:, n_iter * (2 - 1)] * np.diff(scl)
+            A = scl[0] + search_space[:, (n_iter * 2) - 1] * np.diff(scl)
             B = shft[0] + search_space[:, (n_iter * 2) + 1] * np.diff(shft)
             temp = (
                 np.reshape(A, (A.shape[0], 1))
                 * np.reshape(corr_sig_x, (1, corr_sig_x.shape[0])) + np.tile(B, [corr_sig_l, 1]).T
             )
             temp = f(temp.flatten("C")).reshape((temp.shape))
+            # need to remove NaNs after pchip interpoolator, otherwise it will produce wrong results, especially
+            # if the shift_range is large
+            temp = np.nan_to_num(temp)
             imax = np.dot(temp, corr_sig_y).argmax()
 
             # save optimum
