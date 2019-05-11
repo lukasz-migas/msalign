@@ -1,0 +1,59 @@
+# Site settings
+site_name: msalign
+site_description: "msalign"
+site_author: Lukasz G. Migas
+
+copyright: <a href='http://github.com/lukasz-migas'>Lukasz G. Migas</a>
+
+site_url: https://lukasz-migas.github.io/msalign
+repo_url: https://github.com/lukasz-migas/msalign
+edit_uri: https://github.com/lukasz-migas/msalign/tree/master/site-source
+
+use_directory_urls: false
+
+google_analytics: ['UA-130097236-1', 'https://msalign.lukasz-migas.com']
+docs_dir: 'site-source'
+site_dir: 'docs'
+
+markdown_extensions:
+  - admonition
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - toc:
+      permalink: true
+
+# Extra CCS
+extra_css:
+  - css/justify.css
+  - css/dark_theme.css
+
+# Page layout
+nav:
+    - Home: index.md
+    - Installation: main/installation.md
+    - Usage: main/usage.md
+    - About: main/about.md
+
+theme: 
+  name: material
+  # logo: 'assets/images/logo.svg'
+  # favicon: 'assets/images/favicon.ico'
+  language: 'en'
+  include_sidebar: true 
+  palette:
+    primary: 'green'
+    accent: 'light green'
+  feature:
+    tabs: true
+
+extra:
+  version: 0.1.0
+  social:
+    - type: 'github'
+      link: 'https://github.com/lukasz-migas'
+    - type: 'twitter'
+      link: 'https://twitter.com/munieq11'
+    - type: 'link'
+      link: 'https://lukasz-migas.com'
+
+  
