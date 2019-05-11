@@ -11,11 +11,3 @@
 
 This package was inspired by MATLAB's [msalign](https://mathworks.com/help/bioinfo/ref/msalign.html) function which
 allows alignment of multiple signals to reference peaks.
-
-## Reference
-
-Monchamp, P., Andrade-Cetto, L., Zhang, J.Y., and Henson, R. (2007) Signal Processing Methods for Mass
-Spectrometry. In Systems Bioinformatics: An Engineering Case-Based Approach, G. Alterovitz and M.F. Ramoni, eds.
-Artech House Publishers).
-
-[MATLAB's msalign](https://mathworks.com/help/bioinfo/ref/msalign.html)
