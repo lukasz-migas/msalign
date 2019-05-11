@@ -17,6 +17,7 @@ site_dir: 'docs'
 
 markdown_extensions:
   - admonition
+  - codehilite
   - pymdownx.emoji:
       emoji_generator: !!python/name:pymdownx.emoji.to_svg
   - toc:
@@ -25,7 +26,7 @@ markdown_extensions:
 # Extra CCS
 extra_css:
   - css/justify.css
-  - css/dark_theme.css
+  # - css/dark_theme.css
 
 # Page layout
 nav:
@@ -41,13 +42,13 @@ theme:
   language: 'en'
   include_sidebar: true 
   palette:
-    primary: 'green'
-    accent: 'light green'
+    primary: 'blue grey'
+    accent: 'deep orange'
   feature:
-    tabs: true
+    tabs: false
 
 extra:
-  version: 0.1.0
+  version: 0.0.8
   social:
     - type: 'github'
       link: 'https://github.com/lukasz-migas'
