@@ -112,11 +112,15 @@ def msalign(xvals, zvals, peaks, **kwargs):
         maximum allowed shifts. Default: [-100, 100]
     only_shift: bool
         determines if signal should be shifted (True) or rescaled (False). Default: True
+    return_shifts: bool
+        decide whether shift parameter `shift_opt` should also be returned. Default: False
 
     Returns
     -------
     zvals_out: numpy array
         calibrated array
+    shift_opt: numpy array (optional)
+        amount of shift for each signal. Only returned if return_shift is set to True
     """
     # check input
     zvals = check_xy(xvals, zvals)
@@ -138,6 +142,7 @@ def msalign(xvals, zvals, peaks, **kwargs):
     shift_range = kwargs.get("shift_range", np.array([-100, 100]))
     if isinstance(shift_range, list):
         shift_range = np.array(shift_range)
+    return_shifts = kwargs.get("return_shifts", False)
 
     # number of peaks
     P = peaks
@@ -176,6 +181,8 @@ def msalign(xvals, zvals, peaks, **kwargs):
         raise ValueError("Value of 'resolution' must be above 0!")
     if not isinstance(only_shift, bool):
         raise ValueError("Value of 'only_shift' must be a boolean")
+    if not isinstance(return_shifts, bool):
+        raise ValueError("Value of 'return_shift' must be a boolean")
 
     # check that values for gaussian_width are valid
     G = np.zeros((n_peaks, 1))
@@ -244,7 +251,7 @@ def msalign(xvals, zvals, peaks, **kwargs):
 
         for n_iter in range(iterations):  # increase for better resolution
             # scale and shift search space
-            A = scl[0] + search_space[:, (n_iter * 2) - 1] * np.diff(scl)
+            A = scl[0] + search_space[:, (n_iter * 2) - 2] * np.diff(scl)
             B = shft[0] + search_space[:, (n_iter * 2) + 1] * np.diff(shft)
             temp = (
                 np.reshape(A, (A.shape[0], 1))
@@ -277,6 +284,8 @@ def msalign(xvals, zvals, peaks, **kwargs):
                               zvals[n_signal])
         zvals_out[n_signal] = f(xvals)
 
+    if return_shifts:
+        return zvals_out, shift_opt
     return zvals_out
 
 
@@ -292,6 +301,7 @@ if __name__ == "__main__":
         grid_steps=20,
         ratio=2.5,
         shift_range=[-5, 5],
+        only_shift=False,
     )
 
     fname = r"./example_data/msalign_test_data.csv"

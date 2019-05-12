@@ -58,6 +58,13 @@ plt.show()
 !!!note
     As you can see, the signals that were shifted have values that go to 0 intensity. Rather than extrapolating, values that are returned as `nan` by the interpolator are replaced with 0s.
 
+## Noisy synthetic example
+
+If your data is a bit more noisy (as most real dataset would be), you can also easily align it using `msalign`. In this example I simply 
+change the value of `noise` from `1e-3` to `1e-1`.
+
+![img](../img/noisy_synthetic_signal_before_and_after.png)
+
 ## Mass Spectrometry example
 
 You can try-out the example that is used in MATLAB documentation. Simply download it from the [msalign GitHub page](https://github.com/lukasz-migas/msalign/raw/master/example_data/msalign_test_data.csv) 
@@ -80,7 +87,16 @@ kwargs = dict(
     grid_steps=20,
     ratio=2.5,
     shift_range=[-100, 100],
+    only_shift=False,
     )
 
 zvals_new = msalign(xvals, zvals, peaks, **kwargs)
 ```
+
+<iframe 
+    width="825" 
+    frameborder="0" 
+    height="850"
+    src="../img/mass_spectrum_before_and_after_alignment.html"
+    style="background: #FFFFFF;"
+></iframe>

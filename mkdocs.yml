@@ -34,6 +34,7 @@ nav:
     - Installation: main/installation.md
     - Usage: main/usage.md
     - Reference: main/reference.md
+    - Changelog: main/changelog.md
     - About: main/about.md
 
 theme: 

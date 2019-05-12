@@ -1,9 +1,10 @@
 """Test functions"""
 
-from msalign import generate_function, check_xy, msalign
-import scipy.interpolate as interpolate
 import numpy as np
+import scipy.interpolate as interpolate
 from numpy.testing import assert_equal, assert_raises
+
+from msalign import check_xy, generate_function, msalign
 
 
 class Test_generate_function(object):
@@ -11,11 +12,13 @@ class Test_generate_function(object):
 
     @staticmethod
     def test_generate_function_pchip():
+        """Test pchip function generator"""
         f = generate_function("pchip", [1, 2, 3], [3, 2, 1])
         assert isinstance(f, interpolate.PchipInterpolator)
 
     @staticmethod
     def test_generate_function_interp1d():
+        """Test other interpolation function generator"""
         f = generate_function("zero", [1, 2, 3], [3, 2, 1])
         assert isinstance(f, interpolate.interp1d)
 
@@ -25,6 +28,7 @@ class Test_check_xy(object):
 
     @staticmethod
     def test_check_xy_correct():
+        """Check that data orientation will be correctly set"""
         xvals = np.arange(10)
         zvals_in = np.random.randint(0, 100, (20, 10))
         zvals_out = check_xy(xvals, zvals_in)
@@ -32,6 +36,7 @@ class Test_check_xy(object):
 
     @staticmethod
     def test_check_xy_incorrect():
+        """Check that data orientation will be correctly set"""
         xvals = np.arange(10)
         zvals_in = np.random.randint(0, 100, (10, 20))
         zvals_out = check_xy(xvals, zvals_in)
@@ -39,15 +44,18 @@ class Test_check_xy(object):
 
     @staticmethod
     def test_check_xy_invalid():
+        """Check that the function will raise an error if incorrectly shaped data is parsed in"""
         xvals = np.arange(10)
         zvals_in = np.random.randint(0, 100, (11, 20))
         assert_raises(ValueError, check_xy, xvals, zvals_in)
 
 
 class Test_msalign(object):
+    """Check msalign"""
 
     @staticmethod
     def test_msalign_parameters_invalid():
+        """Make sure that parameters will be always be correct"""
         xvals = np.arange(10)
         zvals = np.random.randint(0, 100, (20, 10))
         assert_raises(TypeError, msalign, xvals, zvals, 10)
@@ -61,3 +69,4 @@ class Test_msalign(object):
         assert_raises(ValueError, msalign, xvals, zvals, [10], grid_steps=0)
         assert_raises(ValueError, msalign, xvals, zvals, [10], resolution=0)
         assert_raises(ValueError, msalign, xvals, zvals, [10, 20], only_shift="HelloWorld")
+        assert_raises(ValueError, msalign, xvals, zvals, [10, 20], return_shifts="HelloWorld")
