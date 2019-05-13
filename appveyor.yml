@@ -8,18 +8,30 @@ platform:
 
 environment:
   matrix:
-    - MINICONDA: C:\Miniconda27-x64
+    - PYTHON: "C:/Python27"
+      MINICONDA: C:\Miniconda
+      PYTHON_ARCH: 32
+      PYTHON_VERSION: "2.7"
+    - PYTHON: "C:/Python27"
+      MINICONDA: C:\Miniconda-x64
       PYTHON_ARCH: 64
       PYTHON_VERSION: "2.7"
-    - MINICONDA: C:\Miniconda34-x64
+    - PYTHON: "C:/Python34"
+      MINICONDA: C:\Miniconda34-x64
       PYTHON_ARCH: 64
       PYTHON_VERSION: "3.4"
-    - MINICONDA: C:\Miniconda35-x64
+    - PYTHON: "C:/Python35"
+      MINICONDA: C:\Miniconda35-x64
       PYTHON_ARCH: 64
       PYTHON_VERSION: "3.5"
-    - MINICONDA: C:\Miniconda36-x64
+    - PYTHON: "C:/Python36"
+      MINICONDA: C:\Miniconda36-x64
       PYTHON_ARCH: 64
       PYTHON_VERSION: "3.6"
+    - PYTHON: "C:/Python37"
+      MINICONDA: C:\Miniconda37-x64
+      PYTHON_ARCH: 64
+      PYTHON_VERSION: "3.7"
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA% %PYTHON_ARCH%"
@@ -27,10 +39,10 @@ init:
 install:
   # set environment
   # - "%PYTHON%/Scripts/pip.exe install virtualenv"
-  # - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   # print environment information
-  # - pip --version
+  - pip --version
   # - virtualenv --version
   # install conda
   - conda update --yes --quiet conda
