@@ -8,12 +8,12 @@ platform:
 
 environment:
   matrix:
-    - MINICONDA: C:\Miniconda27-x86
-      PYTHON_ARCH: 32
-      PYTHON_VERSION: "2.7"
-    - MINICONDA: C:\Miniconda27-x64
-      PYTHON_ARCH: 64
-      PYTHON_VERSION: "2.7"
+    # - MINICONDA: C:\Miniconda27-x86
+    #   PYTHON_ARCH: 32
+    #   PYTHON_VERSION: "2.7"
+    # - MINICONDA: C:\Miniconda27-x64
+    #   PYTHON_ARCH: 64
+    #   PYTHON_VERSION: "2.7"
     - MINICONDA: C:\Miniconda36-x86
       PYTHON_ARCH: 32
       PYTHON_VERSION: "3.6"
@@ -45,4 +45,4 @@ test_script:
   - python msalign/__init__.py
 
 matrix:
-  fast_finish: true
+  fast_finish: false
