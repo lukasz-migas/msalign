@@ -41,7 +41,7 @@ zvals_new = msalign(xvals, zvals, peaks, **kwargs)
 
 ## Example alignment
 
-In the [Usage](main/usage.html) section you will find a couple of examples of signal alignment based on single or multiple
+In the [Usage](main/usage.md) section you will find a couple of examples of signal alignment based on single or multiple
 reference peaks.
 
 ![img](img/noisy_synthetic_signal_before_and_after.png)

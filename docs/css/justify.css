@@ -1,0 +1,18 @@
+ul.share li .fab {
+    display: block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    text-align: center;
+    transition: all 150ms ease-in-out;
+    color: #fff;
+}
+
+ul.share li:hover .fab {
+    transform: scale(1.4)
+}
+
+div.article-style, div.pub-abstract, p {
+    text-align: justify
+}
