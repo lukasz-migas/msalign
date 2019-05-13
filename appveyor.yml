@@ -1,0 +1,36 @@
+build: false
+
+platform:
+  - x64
+  - x86
+
+environment:
+  matrix:
+    - PYTHON: "C:/Python27"
+      MINICONDA: C:\Miniconda36-x64
+      PYTHON_ARCH: 64
+
+init:
+  - "ECHO %PYTHON_VERSION% %MINICONDA% %PYTHON_ARCH%"
+
+install:
+  # set environment
+  - "%PYTHON%/Scripts/pip.exe install virtualenv"
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  # print environment information
+  - pip --version
+  - virtualenv --version
+  # install conda
+  - conda update --yes --quiet conda
+  - conda create -n testenv --yes python=3.6
+  - source activate testenv
+  - pip install -U pip wheel
+  - pip install -U -r msalign_requirements.txt --ignore-installed
+  - pip install git+https://github.com/lukasz-migas/msalign.git
+
+test_script:
+  - source activate testenv
+  - python msalign/__init__.py
+
+matrix:
+  fast_finish: true
