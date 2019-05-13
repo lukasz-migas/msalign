@@ -17,6 +17,7 @@ install:
   # set environment
   - "%PYTHON%/Scripts/pip.exe install virtualenv"
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   # print environment information
   - pip --version
   - virtualenv --version
