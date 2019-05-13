@@ -1,6 +1,8 @@
 # msalign - signal calibration and alignment
 
 [![Build Status](https://travis-ci.com/lukasz-migas/msalign.svg?branch=master)](https://travis-ci.com/lukasz-migas/msalign)
+[![CircleCI](https://circleci.com/gh/lukasz-migas/msalign.svg?style=svg)](https://circleci.com/gh/lukasz-migas/msalign)
+[![Build status](https://ci.appveyor.com/api/projects/status/0qwrkq86qg24y5un?svg=true)](https://ci.appveyor.com/project/lukasz-migas/msalign)
 [![codecov](https://codecov.io/gh/lukasz-migas/msalign/branch/master/graph/badge.svg)](https://codecov.io/gh/lukasz-migas/msalign)
 [![Requirements Status](https://requires.io/github/lukasz-migas/msalign/requirements.svg?branch=master)](https://requires.io/github/lukasz-migas/msalign/requirements/?branch=master)
 [![CodeFactor](https://www.codefactor.io/repository/github/lukasz-migas/msalign/badge)](https://www.codefactor.io/repository/github/lukasz-migas/msalign)
