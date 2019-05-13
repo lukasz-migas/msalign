@@ -45,7 +45,9 @@ jobs:
         - run:
             name: Run msasign
             command: |
-              python msalign/__init__.py
+              source activate testenv;
+              pip list;
+              python msalign/__init__.py;
         - save_cache:
             key: pip-cache
             paths:
