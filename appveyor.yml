@@ -24,13 +24,13 @@ install:
   # install conda
   - conda update --yes --quiet conda
   - conda create -n testenv --yes python=3.6
-  - source activate testenv
+  - activate testenv
   - pip install -U pip wheel
   - pip install -U -r msalign_requirements.txt --ignore-installed
   - pip install git+https://github.com/lukasz-migas/msalign.git
 
 test_script:
-  - source activate testenv
+  - activate testenv
   - python msalign/__init__.py
 
 matrix:
