@@ -26,16 +26,14 @@ xvals = np.arange(n_points)
 
 # the first signal is 'real' and we should align to that
 synthetic_signal = np.zeros((n_signals, n_points))
-synthetic_signal[0] = signal.gaussian(n_points, std=4) + np.random.normal(1, noise, n_points)
+synthetic_signal[0] = signal.gaussian(n_points, std=4) + np.random.normal(0, noise, n_points)
 
 # determine the major peak by which msalign should align
 alignment_peak = synthetic_signal[0].argmax()
 
 # apply shift pattern
 for i in range(1, n_signals):
-    synthetic_signal[i] = shift(
-        signal.gaussian(n_points, std=4), shifts[i - 1])
-        + np.random.normal(1, noise, n_points)
+    synthetic_signal[i] = shift(signal.gaussian(n_points, std=4), shifts[i - 1]) + np.random.normal(0, noise, n_points)
 
 # plot signals that have not yet been aligned
 plt.figure()
@@ -93,7 +91,7 @@ kwargs = dict(
 zvals_new = msalign(xvals, zvals, peaks, **kwargs)
 ```
 
-<iframe
+<iframe  
     width="825"
     frameborder="0"
     height="850"
