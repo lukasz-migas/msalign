@@ -8,24 +8,33 @@ platform:
 
 environment:
   matrix:
-    - PYTHON: "C:/Python36"
-      MINICONDA: C:\Miniconda36-x64
+    - MINICONDA: C:\Miniconda27-x86
+      PYTHON_ARCH: 32
+      PYTHON_VERSION: "2.7"
+    - MINICONDA: C:\Miniconda27-x64
       PYTHON_ARCH: 64
+      PYTHON_VERSION: "2.7"
+    - MINICONDA: C:\Miniconda36-x86
+      PYTHON_ARCH: 32
+      PYTHON_VERSION: "3.6"
+    - MINICONDA: C:\Miniconda36-x64
+      PYTHON_ARCH: 64
+      PYTHON_VERSION: "3.6"
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA% %PYTHON_ARCH%"
 
 install:
   # set environment
-  - "%PYTHON%/Scripts/pip.exe install virtualenv"
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  # - "%PYTHON%/Scripts/pip.exe install virtualenv"
+  # - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   # print environment information
-  - pip --version
-  - virtualenv --version
+  # - pip --version
+  # - virtualenv --version
   # install conda
   - conda update --yes --quiet conda
-  - conda create -n testenv --yes python=3.6
+  - conda create -n testenv --yes  #python=3.6
   - activate testenv
   - pip install -U pip wheel
   - pip install -U -r msalign_requirements.txt --ignore-installed
