@@ -52,6 +52,7 @@ install:
   - conda create -n testenv --yes  #python=3.6
   - activate testenv
   # - pip install -U pip wheel
+  # pip install -U -r msalign_requirements.txt --ignore-installed
   - pip install -r msalign_requirements.txt
   - pip install git+https://github.com/lukasz-migas/msalign.git
 
