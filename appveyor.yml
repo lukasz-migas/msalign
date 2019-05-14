@@ -8,6 +8,7 @@ platform:
 
 environment:
   matrix:
+  # python 2.7
     - PYTHON: "C:/Python27"
       MINICONDA: C:\Miniconda
       PYTHON_ARCH: 32
@@ -16,18 +17,22 @@ environment:
       MINICONDA: C:\Miniconda-x64
       PYTHON_ARCH: 64
       PYTHON_VERSION: "2.7"
+    #python 3.4
     - PYTHON: "C:/Python34"
       MINICONDA: C:\Miniconda34-x64
       PYTHON_ARCH: 64
       PYTHON_VERSION: "3.4"
+    # python 3.5
     - PYTHON: "C:/Python35"
       MINICONDA: C:\Miniconda35-x64
       PYTHON_ARCH: 64
       PYTHON_VERSION: "3.5"
+    # python 3.6
     - PYTHON: "C:/Python36"
       MINICONDA: C:\Miniconda36-x64
       PYTHON_ARCH: 64
       PYTHON_VERSION: "3.6"
+    # python 3.7
     - PYTHON: "C:/Python37"
       MINICONDA: C:\Miniconda37-x64
       PYTHON_ARCH: 64
@@ -38,18 +43,16 @@ init:
 
 install:
   # set environment
-  # - "%PYTHON%/Scripts/pip.exe install virtualenv"
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   # print environment information
   - pip --version
-  # - virtualenv --version
   # install conda
   - conda update --yes --quiet conda
   - conda create -n testenv --yes  #python=3.6
   - activate testenv
   # - pip install -U pip wheel
-  - pip install -U -r msalign_requirements.txt --ignore-installed
+  - pip install -r msalign_requirements.txt
   - pip install git+https://github.com/lukasz-migas/msalign.git
 
 test_script:
