@@ -1,4 +1,4 @@
-build: false
+build: "off"
 
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
@@ -61,4 +61,4 @@ test_script:
   - python msalign/__init__.py
 
 matrix:
-  fast_finish: false
+  fast_finish: true
