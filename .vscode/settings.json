@@ -1,9 +1,0 @@
-{
-    "python.pythonPath": "C:\\Miniconda3\\envs\\msalign_py3\\python.exe",
-    "python.testing.pyTestArgs": [
-        "msalign"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.nosetestsEnabled": false,
-    "python.testing.pyTestEnabled": true
-}
