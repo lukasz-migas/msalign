@@ -1,2 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Linguist settings
+site_source/* linguist-vendored
+docs/* linguist-vendored
