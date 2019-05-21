@@ -4,4 +4,3 @@
 # Linguist settings
 site_source/* linguist-vendored
 docs/* linguist-vendored
-linguist-language=Python
