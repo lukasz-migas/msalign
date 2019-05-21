@@ -2,5 +2,5 @@
 * text=auto
 
 # Linguist settings
-site_source/* linguist-vendored
-docs/* linguist-vendored
+site_source/* linguist-documentation
+docs/* linguist-documentation
