@@ -35,15 +35,8 @@ matrix:
     python: 3.6
   # allow failures
   allow_failures:
-  # flake8
-  - env: TEST=flake
-    os: linux
-    python: 3.6
-    # coverage
-  - env: TEST=coverage
-    os: linux
-    python: 3.6
   # windows10 - 3.7
+  # fails because of TravisCI big which prevents PyPI deployment from Windows
   - env:
     - Image=Win10_37
     - PATH=/c/Python37:/c/Python37/Scripts:$PATH
