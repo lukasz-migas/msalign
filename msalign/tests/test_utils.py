@@ -97,4 +97,4 @@ class Test_msalign(object):
         # align using msalign
         synthetic_signal_shifted = msalign(xvals, synthetic_signal, [alignment_peak])
         signal_difference = np.sum(synthetic_signal_shifted) - np.sum(synthetic_signal)
-        assert signal_difference == 0
+        assert signal_difference < 0.001
