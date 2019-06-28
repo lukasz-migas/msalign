@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2019 Lukasz Migas
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 DESCRIPTION = "msalign: Signal calibration and alignment by reference peaks"
 
 with open("README.md") as f:
@@ -24,6 +24,7 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
     "Operating System :: POSIX",
     "Operating System :: Unix",
     "Operating System :: MacOS",

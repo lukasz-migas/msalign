@@ -49,7 +49,7 @@ theme:
     tabs: false
 
 extra:
-  version: 0.0.8
+  version: 0.1.1
   social:
     - type: 'github'
       link: 'https://github.com/lukasz-migas'
