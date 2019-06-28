@@ -95,6 +95,10 @@ class Test_msalign(object):
                 np.random.normal(0, noise, n_points)
 
         # align using msalign
-        synthetic_signal_shifted = msalign(xvals, synthetic_signal, [alignment_peak])
+        synthetic_signal_shifted, shifts_out = msalign(xvals, synthetic_signal, [alignment_peak], return_shifts=True)
         signal_difference = np.sum(synthetic_signal_shifted) - np.sum(synthetic_signal)
+        alignment_peak_shifted = synthetic_signal_shifted[0].argmax()
+
+        assert shifts_out.shape[0] == n_signals
+        assert (alignment_peak - alignment_peak_shifted) < 0.001
         assert signal_difference < 0.001

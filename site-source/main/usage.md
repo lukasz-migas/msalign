@@ -54,9 +54,9 @@ plt.show()
 ![img](../img/synthetic_signal_before_and_after.png)
 
 !!!note
-As you can see, the signals that were shifted have values that go to 0
-intensity. Rather than extrapolating, values that are returned as `nan` by the
-interpolator are replaced with 0s.
+    As you can see, the signals that were shifted have values that go to 0
+    intensity. Rather than extrapolating, values that are returned as `nan` by the
+    interpolator are replaced with 0s.
 
 ## Noisy synthetic example
 

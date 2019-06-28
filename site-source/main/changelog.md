@@ -1,9 +1,5 @@
 # Changelog
 
-## Version 0.1.1
-
-- Improvement: Bumped the version of python that is supported to 3.8
-
 ## Version 0.1.0
 
 - Fixed: [#5](https://github.com/lukasz-migas/msalign/issues/5) small bug that prevented correct alignment of the MS example

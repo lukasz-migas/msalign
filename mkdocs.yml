@@ -11,9 +11,9 @@ edit_uri: https://github.com/lukasz-migas/msalign/tree/master/site-source
 
 use_directory_urls: false
 
-google_analytics: ['UA-130097236-1', 'https://msalign.lukasz-migas.com']
-docs_dir: 'site-source'
-site_dir: 'docs'
+google_analytics: ["UA-130097236-1", "https://msalign.lukasz-migas.com"]
+docs_dir: "site-source"
+site_dir: "docs"
 
 markdown_extensions:
   - admonition
@@ -29,33 +29,31 @@ extra_css:
 
 # Page layout
 nav:
-    - Home: index.md
-    - Installation: main/installation.md
-    - Usage: main/usage.md
-    - Reference: main/reference.md
-    - Changelog: main/changelog.md
-    - About: main/about.md
+  - Home: index.md
+  - Installation: main/installation.md
+  - Usage: main/usage.md
+  - Reference: main/reference.md
+  - Changelog: main/changelog.md
+  - About: main/about.md
 
-theme: 
+theme:
   name: material
   # logo: 'assets/images/logo.svg'
   # favicon: 'assets/images/favicon.ico'
-  language: 'en'
-  include_sidebar: true 
+  language: "en"
+  include_sidebar: true
   palette:
-    primary: 'blue grey'
-    accent: 'deep orange'
+    primary: "blue grey"
+    accent: "deep orange"
   feature:
     tabs: false
 
 extra:
-  version: 0.1.1
+  version: 0.1.2
   social:
-    - type: 'github'
-      link: 'https://github.com/lukasz-migas'
-    - type: 'twitter'
-      link: 'https://twitter.com/munieq11'
-    - type: 'link'
-      link: 'https://lukasz-migas.com'
-
-  
+    - type: "github"
+      link: "https://github.com/lukasz-migas"
+    - type: "twitter"
+      link: "https://twitter.com/munieq11"
+    - type: "link"
+      link: "https://lukasz-migas.com"
