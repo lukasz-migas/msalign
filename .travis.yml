@@ -3,79 +3,83 @@ language: python
 cache:
   pip: true
 python:
-- '2.7'
-- '3.5'
-- '3.6'
+  - "2.7"
+  - "3.5"
+  - "3.6"
 matrix:
   # jobs
   include:
-  # linux - 3.7
-  - env: Image=Linux_37
-    python: 3.7
-    dist: xenial
-  # macOS - 3.7
-  - env: Image=macOS_37
-    os: osx
-    osx_image: xcode10.2
-    language: shell
-  # windows10 - 3.7
-  - env:
-    - Image=Win10_37
-    - PATH=/c/Python37:/c/Python37/Scripts:$PATH
-    os: windows
-    language: shell
-    before_install: choco install python
-  # flake8
-  - env: TEST=flake
-    os: linux
-    python: 3.6
-    # coverage
-  - env: TEST=coverage
-    os: linux
-    python: 3.6
+    # linux - 3.8
+    - env: Image=Linux_38
+      python: 3.8-dev
+      dist: xenial
+    # linux - 3.7
+    - env: Image=Linux_37
+      python: 3.7
+      dist: xenial
+    # macOS - 3.7
+    - env: Image=macOS_37
+      os: osx
+      osx_image: xcode10.2
+      language: shell
+    # windows10 - 3.7
+    - env:
+        - Image=Win10_37
+        - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+      os: windows
+      language: shell
+      before_install: choco install python
+    # flake8
+    - env: TEST=flake
+      os: linux
+      python: 3.6
+      # coverage
+    - env: TEST=coverage
+      os: linux
+      python: 3.6
   # allow failures
   allow_failures:
-  # windows10 - 3.7
-  # fails because of TravisCI big which prevents PyPI deployment from Windows
-  - env:
-    - Image=Win10_37
-    - PATH=/c/Python37:/c/Python37/Scripts:$PATH
-    os: windows
-    language: shell
-    before_install: choco install python
+    # windows10 - 3.7
+    # fails because of TravisCI bug which prevents PyPI deployment from Windows
+    - env:
+        - Image=Win10_37
+        - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+      os: windows
+      language: shell
+      before_install: choco install python
 
 install:
-- pip install --upgrade pip || pip3 install --upgrade pip
-- pip install -r msalign_requirements.txt
-- pip install git+https://github.com/lukasz-migas/msalign.git
-- if [[ "${TEST}" == "flake" ]]; then
+  - pip install --upgrade pip || pip3 install --upgrade pip
+  - pip install -r msalign_requirements.txt
+  - pip install git+https://github.com/lukasz-migas/msalign.git
+  - if [[ "${TEST}" == "flake" ]]; then
     pip install flake8;
-  elif [ "${TEST}" == "coverage" ]; then
+    elif [ "${TEST}" == "coverage" ]; then
     pip install codecov pytest==3.6 pytest-cov pytest-sugar pytest-travis-fold;
-  elif [ "${Image}" == "macOS_37" ]; then
+    elif [ "${Image}" == "macOS_37" ]; then
     pip install twine;
-  elif [ "${Image}" == "Win10_37" ]; then
+    elif [ "${Image}" == "Win10_37" ]; then
     pip install twine setuptools wheel;
-  fi;
+    fi;
 
 script:
-- SRC_DIR=$(pwd)
-- echo $SRC_DIR
-- ls || dir
-- python3 msalign/__init__.py || python msalign/__init__.py
-- if [[ "${TEST}" == "flake" ]]; then
+  - SRC_DIR=$(pwd)
+  - echo $SRC_DIR
+  - ls || dir
+  - python3 msalign/__init__.py || python msalign/__init__.py
+  - if [[ "${TEST}" == "flake" ]]; then
     flake8;
-  elif [[ "${TEST}" == "coverage" ]]; then
+    elif [[ "${TEST}" == "coverage" ]]; then
     py.test --cov;
-  fi;
+    fi;
 
 notifications:
   email: false
 
 after_success:
-- if [ "${TEST}" == "coverage" ]; then
+  - if [ "${TEST}" == "coverage" ]; then
     codecov --token=2f868dd3-c8ec-4889-8be0-c487ec37fc9e;
-  fi
+    fi
 
 deploy:
   provider: pypi

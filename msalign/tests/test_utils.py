@@ -3,6 +3,8 @@
 import numpy as np
 import scipy.interpolate as interpolate
 from numpy.testing import assert_equal, assert_raises
+from scipy import signal
+from scipy.ndimage import shift
 
 from msalign import check_xy, generate_function, msalign
 
@@ -70,3 +72,29 @@ class Test_msalign(object):
         assert_raises(ValueError, msalign, xvals, zvals, [10], resolution=0)
         assert_raises(ValueError, msalign, xvals, zvals, [10, 20], only_shift="HelloWorld")
         assert_raises(ValueError, msalign, xvals, zvals, [10, 20], return_shifts="HelloWorld")
+
+    @staticmethod
+    def test_msalign_run():
+        # generate synthetic dataset
+        n_points = 100
+        n_signals = 5
+        noise = 0
+        shifts = np.arange(1, n_signals)
+        xvals = np.arange(n_points)
+
+        # the first signal is 'real' and we should align to that
+        synthetic_signal = np.zeros((n_signals, n_points))
+        synthetic_signal[0] = signal.gaussian(n_points, std=4) + np.random.normal(0, noise, n_points)
+
+        # determine the major peak by which msalign should align
+        alignment_peak = synthetic_signal[0].argmax()
+
+        # apply shift pattern
+        for i in range(1, n_signals):
+            synthetic_signal[i] = shift(signal.gaussian(n_points, std=4), shifts[i - 1]) + \
+                np.random.normal(0, noise, n_points)
+
+        # align using msalign
+        synthetic_signal_shifted = msalign(xvals, synthetic_signal, [alignment_peak])
+        signal_difference = np.sum(synthetic_signal_shifted) - np.sum(synthetic_signal)
+        assert signal_difference == 0

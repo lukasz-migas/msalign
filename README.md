@@ -11,6 +11,7 @@
 [![Wheel](https://img.shields.io/pypi/wheel/msalign.svg)](https://pypi.org/project/msalign/)
 [![PyPI](https://img.shields.io/pypi/v/msalign.svg)](https://pypi.org/project/msalign/)
 [![Versions](https://img.shields.io/pypi/pyversions/msalign.svg)](https://pypi.org/project/msalign/)
+[![Downloads](https://pepy.tech/badge/msalign)](https://pepy.tech/project/msalign)
 
 This package was inspired by MATLAB's [msalign](https://mathworks.com/help/bioinfo/ref/msalign.html) function which
 allows alignment of multiple signals to reference peaks.
