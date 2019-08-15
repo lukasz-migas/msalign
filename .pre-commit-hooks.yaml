@@ -1,0 +1,31 @@
+- id: autopep8
+  name: autopep8
+  entry: autopep8
+  language: python
+  "types": [python]
+  args: ["--in-place --aggressive --aggressive --max-line-length=120"]
+  require_serial: false
+  additional_dependencies: []
+- id: flake8
+  name: Flake8
+  description: This hook runs flake8.
+  entry: flake8
+  language: python
+  types: [python]
+  args: ["--config=setup.cfg"]
+  require_serial: true
+- id: name-tests-test
+  name: Tests should end in _test.py
+  description: This verifies that test files are named correctly
+  entry: name-tests-test
+  language: python
+  files: (^|/)tests/.+\.py$
+  args: ["--django=True"]
+- id: black
+  name: black
+  description: "Black: The uncompromising Python code formatter"
+  entry: black
+  language: python
+  language_version: python3
+  require_serial: true
+  types: [python]

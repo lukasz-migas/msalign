@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2019 Lukasz Migas
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 DESCRIPTION = "msalign: Signal calibration and alignment by reference peaks"
 
 with open("README.md") as f:

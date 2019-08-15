@@ -6,7 +6,7 @@ import scipy.interpolate as interpolate
 
 METHODS = ["pchip", "zero", "slinear", "quadratic", "cubic"]
 
-__all__ = ["msalign", "check_xy", "generate_function"]
+__all__ = ["msalign", "check_xy", "generate_function", "find_nearest_index", "convert_peak_values_to_index"]
 
 
 def check_xy(xvals, zvals):
@@ -15,16 +15,16 @@ def check_xy(xvals, zvals):
 
     Parameters
     ----------
-    xvals: numpy array
+    xvals : numpy array
         1D array of separation units (N). The number of elements of xvals must equal the number of elements of
         zvals.shape[1]
-    zvals: numpy array
+    zvals : numpy array
         2D array of intensities that must have common separation units (M x N) where M is the number of vectors
         and N is number of points in the vector
 
     Returns
     -------
-    zvals: numpy array
+    zvals : numpy array
         2D array that should match the dimensions of xvals input
     """
     if xvals.shape[0] != zvals.shape[1]:
@@ -42,25 +42,64 @@ def generate_function(method, xvals, yvals):
 
     Parameters
     ----------
-    method: str
-    xvals: np.array
+    method : str
+    xvals : np.array
         1D array of seperation units (N)
-    yvals: numpy array
+    yvals : numpy array
         1D array of intensity values (N)
 
     Returns
     -------
-    f: scipy interpolator
+    fcn: scipy interpolator
         interpolation function
     """
     if method == "pchip":
-        f = interpolate.PchipInterpolator(xvals, yvals, extrapolate=False)
+        fcn = interpolate.PchipInterpolator(xvals, yvals, extrapolate=False)
     else:
-        f = interpolate.interp1d(
-            xvals, yvals, method, bounds_error=False, fill_value=0
-        )
+        fcn = interpolate.interp1d(xvals, yvals, method, bounds_error=False, fill_value=0)
 
-    return f
+    return fcn
+
+
+def find_nearest_index(xvals, value):
+    """Find index of nearest value
+
+    Parameters
+    ----------
+    xvals : np.array
+        input array
+    value : number (float, int)
+        input value
+    Returns
+    -------
+    index : int
+        index of nearest value
+    """
+    xvals = np.asarray(xvals)
+    return np.argmin(np.abs(xvals - value))
+
+
+def convert_peak_values_to_index(xvals, peaks):
+    """Converts non-integer peak values to index value by finding
+    the nearest value in the `xvals` array.
+
+    Parameters
+    ----------
+    xvals : np.array
+        input array
+    peaks : list
+        list of peaks
+
+    Returns
+    -------
+    peaks_idx : list
+        list of peaks as index
+    """
+    peaks_idx = []
+    for peak in peaks:
+        peaks_idx.append(find_nearest_index(xvals, peak))
+
+    return peaks_idx
 
 
 def msalign(xvals, zvals, peaks, **kwargs):
@@ -84,44 +123,50 @@ def msalign(xvals, zvals, peaks, **kwargs):
 
     Parameters
     ----------
-    xvals: numpy array
+    xvals : numpy array
         1D array of separation units (N). The number of elements of xvals must equal the number of elements of
         zvals.shape[1]
-    zvals: numpy array
+    zvals : numpy array
         2D array of intensities that must have common separation units (M x N) where M is the number of vectors
         and N is number of points in the vector
-    peaks: list
+    peaks : list
         list of reference peaks that must be found in the xvals vector
-    method: str
+    method : str
         interpolation method. Default: 'cubic'. MATLAB version uses 'pchip' which is significantly slower in Python
     weights: list (optional)
         list of weights associated with the list of peaks. Must be the same length as list of peaks
-    width: float (optional)
+    width : float (optional)
         width of the gaussian peak in separation units. Default: 10
-    ratio: float (optional)
+    ratio : float (optional)
         scaling value that determines the size of the window around every alignment peak. The synthetic signal is
         compared to the input signal within these regions. Default: 2.5
-    resolution: int (optional)
+    resolution : int (optional)
         Default: 100
-    iterations: int (optional)
+    iterations : int (optional)
         number of iterations. Increasing this value will (slightly) slow down the function but will improve
         performance. Default: 5
-    grid_steps: int (optional)
+    grid_steps : int (optional)
         number of steps to be used in the grid search. Default: 20
-    shift_range: list / numpy array (optional)
+    shift_range : list / numpy array (optional)
         maximum allowed shifts. Default: [-100, 100]
-    only_shift: bool
+    only_shift : bool
         determines if signal should be shifted (True) or rescaled (False). Default: True
-    return_shifts: bool
+    return_shifts : bool
         decide whether shift parameter `shift_opt` should also be returned. Default: False
+    align_by_index : bool
+        decide whether alignment should be done based on index rather than `xvals` array. Default: False
 
     Returns
     -------
-    zvals_out: numpy array
+    zvals_out : numpy array
         calibrated array
-    shift_opt: numpy array (optional)
+    shift_opt : numpy array (optional)
         amount of shift for each signal. Only returned if return_shift is set to True
     """
+    # make sure input is an array
+    xvals = np.asarray(xvals)
+    zvals = np.asarray(zvals)
+
     # check input
     zvals = check_xy(xvals, zvals)
     n_signals = zvals.shape[0]
@@ -142,7 +187,15 @@ def msalign(xvals, zvals, peaks, **kwargs):
     shift_range = kwargs.get("shift_range", np.array([-100, 100]))
     if isinstance(shift_range, list):
         shift_range = np.array(shift_range)
+    # return shift vector
     return_shifts = kwargs.get("return_shifts", False)
+    # align signals by index rather than peak value
+    align_by_index = kwargs.get("align_by_index", False)
+    # align by index - rather than aligning to arbitrary non-integer values in the xvals, you can instead
+    # use index of those values
+    if align_by_index:
+        peaks = convert_peak_values_to_index(xvals, peaks)
+        xvals = np.arange(xvals.shape[0])
 
     # number of peaks
     P = peaks
@@ -157,16 +210,11 @@ def msalign(xvals, zvals, peaks, **kwargs):
 
     # check user-specified parameters
     if method not in METHODS:
-        raise ValueError(
-            "Method `{}` not found in the method options: {}".format(method, METHODS)
-        )
+        raise ValueError("Method `{}` not found in the method options: {}".format(method, METHODS))
     if len(W) != n_peaks:
         raise ValueError("Number of weights does not match number of peaks")
     if len(shift_range) != 2:
-        raise ValueError(
-            "Number of 'shift_values' is not correct. Shift range accepts"
-            " numpy array with two values."
-        )
+        raise ValueError("Number of 'shift_values' is not correct. Shift range accepts" " numpy array with two values.")
     if np.diff(shift_range) == 0:
         raise ValueError("Values of 'shift_values' must not be the same!")
     if gaussian_ratio <= 0:
@@ -183,6 +231,8 @@ def msalign(xvals, zvals, peaks, **kwargs):
         raise ValueError("Value of 'only_shift' must be a boolean")
     if not isinstance(return_shifts, bool):
         raise ValueError("Value of 'return_shift' must be a boolean")
+    if not isinstance(align_by_index, bool):
+        raise ValueError("Value of 'align_by_index' must be a boolean")
 
     # check that values for gaussian_width are valid
     G = np.zeros((n_peaks, 1))
@@ -197,9 +247,7 @@ def msalign(xvals, zvals, peaks, **kwargs):
     for i in range(n_peaks):
         leftL = P[i] - gaussian_ratio * G[i]
         rightL = P[i] + gaussian_ratio * G[i]
-        corr_sig_x[:, i] = leftL + (
-            gaussian_resolution_range * (rightL - leftL) / gaussian_resolution
-        )
+        corr_sig_x[:, i] = leftL + (gaussian_resolution_range * (rightL - leftL) / gaussian_resolution)
         corr_sig_y[:, i] = W[i] * np.exp(-np.square((corr_sig_x[:, i] - P[i]) / G[i]))
 
     corr_sig_l = (gaussian_resolution + 1) * n_peaks
@@ -223,13 +271,9 @@ def msalign(xvals, zvals, peaks, **kwargs):
 
     # create the meshgrid only once
     A, B = np.meshgrid(
-        np.divide(np.arange(0, grid_steps), grid_steps - 1),
-        np.divide(np.arange(0, grid_steps), grid_steps - 1),
+        np.divide(np.arange(0, grid_steps), grid_steps - 1), np.divide(np.arange(0, grid_steps), grid_steps - 1)
     )
-    search_space = np.tile(
-        np.vstack([A.flatten(order="F"), B.flatten(order="F")]).T,
-        [1, iterations]
-    )
+    search_space = np.tile(np.vstack([A.flatten(order="F"), B.flatten(order="F")]).T, [1, iterations])
 
     # iterate for every signal
     for n_signal in range(n_signals):
@@ -247,17 +291,17 @@ def msalign(xvals, zvals, peaks, **kwargs):
         # TIP: because instatiation of the function is very slow, the increase of number of iterations has negligible
         # effect of the overall timing of the function. Since you are going to spend 100 ms setting the function up
         # it might as well perform as many iterations as possible
-        f = generate_function(method, xvals, zvals[n_signal])
+        fcn = generate_function(method, xvals, zvals[n_signal])
 
         for n_iter in range(iterations):  # increase for better resolution
             # scale and shift search space
             A = scl[0] + search_space[:, (n_iter * 2) - 2] * np.diff(scl)
             B = shft[0] + search_space[:, (n_iter * 2) + 1] * np.diff(shft)
             temp = (
-                np.reshape(A, (A.shape[0], 1))
-                * np.reshape(corr_sig_x, (1, corr_sig_x.shape[0])) + np.tile(B, [corr_sig_l, 1]).T
+                np.reshape(A, (A.shape[0], 1)) * np.reshape(corr_sig_x, (1, corr_sig_x.shape[0]))
+                + np.tile(B, [corr_sig_l, 1]).T
             )
-            temp = f(temp.flatten("C")).reshape((temp.shape))
+            temp = fcn(temp.flatten("C")).reshape(temp.shape)
             # need to remove NaNs after pchip interpoolator, otherwise it will produce wrong results, especially
             # if the shift_range is large
             temp = np.nan_to_num(temp)
@@ -268,24 +312,20 @@ def msalign(xvals, zvals, peaks, **kwargs):
             shift_opt[n_signal] = B[imax]
 
             # readjust grid for next iteration
-            scl = (
-                scale_opt[n_signal] + np.array([-0.5, 0.5]) * np.diff(scl) * reduce_range_factor
-            )
-            shft = (
-                shift_opt[n_signal] + np.array([-0.5, 0.5]) * np.diff(shft) * reduce_range_factor
-            )
+            scl = scale_opt[n_signal] + np.array([-0.5, 0.5]) * np.diff(scl) * reduce_range_factor
+            shft = shift_opt[n_signal] + np.array([-0.5, 0.5]) * np.diff(shft) * reduce_range_factor
 
     # return results
     zvals_out = np.zeros_like(zvals)
     for n_signal in range(n_signals):
         # interpolate back to the original domain
-        f = generate_function(method,
-                              (xvals - shift_opt[n_signal]) / scale_opt[n_signal],
-                              zvals[n_signal])
-        zvals_out[n_signal] = f(xvals)
+        fcn = generate_function(method, (xvals - shift_opt[n_signal]) / scale_opt[n_signal], zvals[n_signal])
+        zvals_out[n_signal] = np.nan_to_num(fcn(xvals))
 
+    # return aligned data and shifts
     if return_shifts:
         return zvals_out, shift_opt
+    # only return data
     return zvals_out
 
 
@@ -314,8 +354,4 @@ if __name__ == "__main__":
         kwargs.update(dict(method=method))
         tstart = ttime()
         zvals_new = msalign(xvals, zvals, peaks, **kwargs)
-        print(
-            "File - {} :: Method - {} :: Time - {:.4f}".format(
-                fname, method, ttime() - tstart
-            )
-        )
+        print("File - {} :: Method - {} :: Time - {:.4f}".format(fname, method, ttime() - tstart))

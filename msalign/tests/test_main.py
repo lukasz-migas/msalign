@@ -1,15 +1,39 @@
 """Test functions"""
-
 import numpy as np
 import scipy.interpolate as interpolate
-from numpy.testing import assert_equal, assert_raises
+from numpy.testing import assert_equal
+from numpy.testing import assert_raises
 from scipy import signal
 from scipy.ndimage import shift
 
 import msalign
 
 
-class Test_generate_function(object):
+class TestFindNearestIndex(object):
+    """Test find_nearest_index"""
+
+    @staticmethod
+    def test_find_nearest_index():
+        xvals = np.arange(10)
+        correct_index = 3
+        return_index = msalign.find_nearest_index(xvals, 3)
+        assert correct_index == return_index
+
+
+class TestConvertPeaksToIndex(object):
+    """Test """
+
+    @staticmethod
+    def test_convert_peak_values_to_index():
+        x = np.linspace(0, 10, 100, endpoint=False)
+        peaks = [0.0, 1.0, 9.0]
+        expected_idx = [0, 10, 90]
+        returned_idx = msalign.convert_peak_values_to_index(x, peaks)
+
+        assert expected_idx == returned_idx
+
+
+class TestGenerateInterpolationFunction(object):
     """Test generate_function"""
 
     @staticmethod
@@ -25,7 +49,7 @@ class Test_generate_function(object):
         assert isinstance(fcn, interpolate.interp1d)
 
 
-class Test_check_xy(object):
+class TestCheckXY(object):
     """Test check_xy"""
 
     @staticmethod
@@ -52,8 +76,8 @@ class Test_check_xy(object):
         assert_raises(ValueError, msalign.check_xy, xvals, zvals_in)
 
 
-class Test_msalign(object):
-    """Check msalign"""
+class TestMSalign(object):
+    """Test msalign"""
 
     @staticmethod
     def test_msalign_parameters_invalid():
@@ -64,7 +88,7 @@ class Test_msalign(object):
         assert_raises(ValueError, msalign.msalign, xvals, zvals, [10], method="method")
         assert_raises(ValueError, msalign.msalign, xvals, zvals, [10], weights=[10, 10])
         assert_raises(ValueError, msalign.msalign, xvals, zvals, [10], iterations=0)
-        assert_raises(TypeError, msalign.msalign, xvals, zvals, [10], iterations=1.)
+        assert_raises(TypeError, msalign.msalign, xvals, zvals, [10], iterations=1.0)
         assert_raises(ValueError, msalign.msalign, xvals, zvals, [10], shift_range=[-10])
         assert_raises(ValueError, msalign.msalign, xvals, zvals, [10], shift_range=[10, 10])
         assert_raises(ValueError, msalign.msalign, xvals, zvals, [10], ratio=0)
@@ -72,9 +96,11 @@ class Test_msalign(object):
         assert_raises(ValueError, msalign.msalign, xvals, zvals, [10], resolution=0)
         assert_raises(ValueError, msalign.msalign, xvals, zvals, [10, 20], only_shift="HelloWorld")
         assert_raises(ValueError, msalign.msalign, xvals, zvals, [10, 20], return_shifts="HelloWorld")
+        assert_raises(ValueError, msalign.msalign, xvals, zvals, [10, 20], align_by_index="HelloWorld")
 
     @staticmethod
     def test_msalign_run():
+        """Test msalign"""
         # generate synthetic dataset
         n_points = 100
         n_signals = 5
@@ -91,15 +117,33 @@ class Test_msalign(object):
 
         # apply shift pattern
         for i in range(1, n_signals):
-            synthetic_signal[i] = shift(signal.gaussian(n_points, std=4), shifts[i - 1]) + \
-                np.random.normal(0, noise, n_points)
+            synthetic_signal[i] = shift(signal.gaussian(n_points, std=4), shifts[i - 1]) + np.random.normal(
+                0, noise, n_points
+            )
 
         # align using msalign
         synthetic_signal_shifted, shifts_out = msalign.msalign(
-            xvals, synthetic_signal, [alignment_peak], return_shifts=True)
+            xvals, synthetic_signal, [alignment_peak], return_shifts=True
+        )
         signal_difference = np.sum(synthetic_signal_shifted) - np.sum(synthetic_signal)
         alignment_peak_shifted = synthetic_signal_shifted[0].argmax()
 
         assert shifts_out.shape[0] == n_signals
+        assert (alignment_peak - alignment_peak_shifted) < 0.001
+        assert signal_difference < 0.001
+
+        # align using msalign - without shifts
+        synthetic_signal_shifted = msalign.msalign(xvals, synthetic_signal, [alignment_peak])
+        signal_difference = np.sum(synthetic_signal_shifted) - np.sum(synthetic_signal)
+        alignment_peak_shifted = synthetic_signal_shifted[0].argmax()
+
+        assert (alignment_peak - alignment_peak_shifted) < 0.001
+        assert signal_difference < 0.001
+
+        # align using msalign - without shifts
+        synthetic_signal_shifted = msalign.msalign(xvals, synthetic_signal, [alignment_peak], align_by_index=True)
+        signal_difference = np.sum(synthetic_signal_shifted) - np.sum(synthetic_signal)
+        alignment_peak_shifted = synthetic_signal_shifted[0].argmax()
+
         assert (alignment_peak - alignment_peak_shifted) < 0.001
         assert signal_difference < 0.001

@@ -93,7 +93,7 @@ kwargs = dict(
 zvals_new = msalign(xvals, zvals, peaks, **kwargs)
 ```
 
-<iframe  
+<iframe
     width="825"
     frameborder="0"
     height="850"
