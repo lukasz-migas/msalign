@@ -9,10 +9,10 @@ python:
 matrix:
   # jobs
   include:
-    # # linux - 3.8
-    # - env: Image=Linux_38
-    #   python: 3.8-dev
-    #   dist: xenial
+    # linux - 3.8
+    - env: Image=Linux_38
+      python: 3.8-dev
+      dist: xenial
     # linux - 3.7
     - env: Image=Linux_37
       python: 3.7
