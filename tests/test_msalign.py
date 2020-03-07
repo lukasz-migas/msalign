@@ -166,8 +166,8 @@ class TestMSalign(object):
             array[i] = shift(gaussian, shifts[i]) + np.random.normal(0, 0, n_points)
 
         # align using msalign
-        aligned_array, shifts_out = msalign.msalign(
-            x, array, [alignment_peak], return_shifts=True, align_by_index=True, quick_shift=quick_shift
+        aligned_array = msalign.msalign(
+            x, array, [alignment_peak], return_shifts=False, align_by_index=True, quick_shift=quick_shift
         )
         signal_difference = np.sum(aligned_array) - np.sum(array)
         aligned_alignment_peak = aligned_array[0].argmax()
