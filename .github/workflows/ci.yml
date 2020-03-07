@@ -68,10 +68,8 @@ jobs:
           python-version: "3.7"
       - name: Install
         run: |
-          cd msalign
           python setup.py develop
           python -c 'import msalign; print(msalign.__version__)'
-
 
   deploy:
     runs-on: ubuntu-latest
