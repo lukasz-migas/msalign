@@ -33,7 +33,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     runs-on: ${{ matrix.os }}
-    name: "Verify changes passed the  tests"
+    name: "Tests"
 
     steps:
       - uses: actions/checkout@master
@@ -46,9 +46,6 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements/requirements-std.txt
           pip install -r requirements/requirements-dev.txt
-      - name: Change directory
-        run: |
-          cd msalign
       - name: Test with pytest
         run: |
           pytest --cov=msalign
@@ -61,7 +58,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
-    name: "Verify `pip install -e .[dev]` works on ${{ matrix.os }}."
+    name: "Verify installation on ${{ matrix.os }}."
     runs-on: "${{ matrix.os }}"
 
     steps:
@@ -69,7 +66,10 @@ jobs:
       - uses: "actions/setup-python@v1"
         with:
           python-version: "3.8"
-      - name: Run `pip install -e .[dev]`
+      - name: Change directory
         run: |
-          python -m pip install -e .[dev]
+          - cd msalign
+      - name: Install
+        run: |
+          python setup.py develop
           python -c 'import msalign; print(msalign.__version__)'
