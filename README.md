@@ -18,15 +18,24 @@ allows alignment of multiple signals to reference peaks.
 
 ## Installation
 
+Install from PyPi 
+
 ```python
 pip install msalign
 ```
 
-or
+Install directly from GitHub
 
 ```python
-pip install git+https://github.com/lukasz-migas/msalign.git
+pip install -e git+https://github.com/lukasz-migas/msalign.git
 ```
+
+Install in development mode
+
+```python
+python setup.py develop
+```
+
 
 ## Usage
 
@@ -38,8 +47,8 @@ import numpy as np
 from msalign import msalign
 
 
-fname = r"./example_data/msalign_test_data.csv"
-data = np.genfromtxt(fname, delimiter=",")
+filename = r"./example_data/msalign_test_data.csv"
+data = np.genfromtxt(filename, delimiter=",")
 xvals = data[1:, 0]
 zvals = data[1:, 1:].T
 

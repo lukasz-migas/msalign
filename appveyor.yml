@@ -8,20 +8,6 @@ platform:
 
 environment:
   matrix:
-    # python 2.7
-    - PYTHON: "C:/Python27"
-      MINICONDA: C:\Miniconda
-      PYTHON_ARCH: 32
-      PYTHON_VERSION: "2.7"
-    - PYTHON: "C:/Python27"
-      MINICONDA: C:\Miniconda-x64
-      PYTHON_ARCH: 64
-      PYTHON_VERSION: "2.7"
-    #python 3.4
-    - PYTHON: "C:/Python34"
-      MINICONDA: C:\Miniconda34-x64
-      PYTHON_ARCH: 64
-      PYTHON_VERSION: "3.4"
     # python 3.5
     - PYTHON: "C:/Python35"
       MINICONDA: C:\Miniconda35-x64
@@ -37,6 +23,11 @@ environment:
       MINICONDA: C:\Miniconda37-x64
       PYTHON_ARCH: 64
       PYTHON_VERSION: "3.7"
+#    # python 3.8
+#    - PYTHON: "C:/Python38"
+#      MINICONDA: C:\Miniconda38-x64
+#      PYTHON_ARCH: 64
+#      PYTHON_VERSION: "3.8"
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA% %PYTHON_ARCH%"
@@ -49,17 +40,17 @@ install:
   - pip --version
   # install conda
   - conda update --yes --quiet conda
-  - conda create -n testenv --yes #python=3.6
+  - conda create -n testenv --yes
   - activate testenv
   - pip --version
-  # - pip install -U pip wheel
-  # pip install -U -r msalign_requirements.txt --ignore-installed
-  - pip install -r msalign_requirements.txt
+  - pip install -r requirements.txt
   - pip install git+https://github.com/lukasz-migas/msalign.git
 
 test_script:
   - activate testenv
   - python msalign/__init__.py
+  - pip install requirements/requirements-dev.txt
+  - pytest .
 
 matrix:
   fast_finish: true

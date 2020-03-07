@@ -54,7 +54,7 @@ matrix:
 
 install:
   - pip install --upgrade pip || pip3 install --upgrade pip
-  - pip install -r msalign_requirements.txt
+  - pip install -r requirements.txt
   - pip install git+https://github.com/lukasz-migas/msalign.git
   - if [[ "${TEST}" == "flake" ]]; then
     pip install flake8;
@@ -74,7 +74,7 @@ script:
   - if [[ "${TEST}" == "flake" ]]; then
     flake8;
     elif [[ "${TEST}" == "coverage" ]]; then
-    py.test --cov;
+    pytest --cov;
     fi;
 
 notifications:

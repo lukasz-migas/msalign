@@ -36,7 +36,7 @@ jobs:
               conda create -n testenv --yes python=3.6;
               source activate testenv;
               pip install -U pip wheel;
-              pip install -U -r msalign_requirements.txt --ignore-installed;
+              pip install -U -r requirements.txt --ignore-installed;
               pip install git+https://github.com/lukasz-migas/msalign.git;
               echo $PATH;
               echo $CIRCLE_BRANCH;
