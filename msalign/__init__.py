@@ -4,7 +4,7 @@ from typing import List
 import numpy as np
 
 from msalign.align import Aligner
-from msalign.version import __version__  # noqa
+from msalign._version import __version__  # noqa
 
 __all__ = ["msalign", "Aligner"]
 
