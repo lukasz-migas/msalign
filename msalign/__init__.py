@@ -7,6 +7,7 @@ import numpy as np
 
 from msalign.align import Aligner
 
+__version__ = "0.1.3"
 __all__ = ["msalign", "Aligner"]
 
 

@@ -1,0 +1,75 @@
+name: Tests
+
+on: [push]
+
+jobs:
+  style:
+    runs-on: ubuntu-latest
+    name: "Verify code style"
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip  # || pip3 install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8
+      - name: Change directory
+        run: |
+          cd msalign
+      - name: Lint with flake8
+        run: |
+          flake8 msalign
+
+  tests:
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    runs-on: ${{ matrix.os }}
+    name: "Verify changes passed the  tests"
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements/requirements-std.txt
+          pip install -r requirements/requirements-dev.txt
+      - name: Change directory
+        run: |
+          cd msalign
+      - name: Test with pytest
+        run: |
+          pytest --cov=msalign
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+
+  install-dev:
+    strategy:
+      max-parallel: 4
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    name: "Verify `pip install -e .[dev]` works on ${{ matrix.os }}."
+    runs-on: "${{ matrix.os }}"
+
+    steps:
+      - uses: "actions/checkout@v2"
+      - uses: "actions/setup-python@v1"
+        with:
+          python-version: "3.8"
+      - name: Run `pip install -e .[dev]`
+        run: |
+          python -m pip install -e .[dev]
+          python -c 'import msalign; print(msalign.__version__)'

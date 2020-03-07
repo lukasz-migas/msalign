@@ -2,7 +2,8 @@
 #
 # Copyright (C) 2019 Lukasz Migas
 
-VERSION = "0.1.3"
+from msalign import __version__
+
 DESCRIPTION = "msalign: Signal calibration and alignment by reference peaks"
 
 with open("README.md") as f:
@@ -50,7 +51,7 @@ if __name__ == "__main__":
         long_description_content_type="text/markdown",
         license=LICENSE,
         url=URL,
-        version=VERSION,
+        version=__version__,
         download_url=DOWNLOAD_URL,
         install_requires=INSTALL_REQUIRES,
         packages=PACKAGES,
