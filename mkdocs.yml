@@ -23,7 +23,7 @@ markdown_extensions:
 # Extra CCS
 extra_css:
   - css/justify.css
-  - css/changelog.css
+#  - css/changelog.css
 
 # Page layout
 nav:
@@ -47,7 +47,7 @@ theme:
     tabs: false
 
 extra:
-  version: 0.1.2
+  version: 0.1.3
   social:
     - type: "github"
       link: "https://github.com/lukasz-migas"
