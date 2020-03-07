@@ -71,3 +71,33 @@ jobs:
           cd msalign
           python setup.py develop
           python -c 'import msalign; print(msalign.__version__)'
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip  # || pip3 install --upgrade pip
+          pip install -r requirements.txt
+      - name: Build package
+        run: |
+          python setup.py sdist bdist_wheel --universal
+    - name: Publish to Test PyPI
+      uses: pypa/gh-action-pypi-publish@master
+      if: success()
+      with:
+        user: __token__
+        password: ${{ secrets.pypi_test_password }}
+        repository_url: https://test.pypi.org/legacy/
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@master
+      if: success()
+      with:
+        user: __token__
+        password: ${{ secrets.pypi_password }}
