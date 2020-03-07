@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2019 Lukasz Migas
+# Copyright (C) 2020 Lukasz Migas
 
-from msalign import __version__
+from msalign.version import __version__
 
 DESCRIPTION = "msalign: Signal calibration and alignment by reference peaks"
 
@@ -21,11 +21,9 @@ PACKAGES = ["msalign"]
 
 CLASSIFIERS = [
     "Intended Audience :: Science/Research",
-    "Programming Language :: Python :: 2.7",
-    "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
-    # "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.8",
     "Operating System :: POSIX",
     "Operating System :: Unix",
     "Operating System :: MacOS",

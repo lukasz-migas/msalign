@@ -6,8 +6,8 @@ from typing import List
 import numpy as np
 
 from msalign.align import Aligner
+from msalign.version import __version__  # noqa
 
-__version__ = "0.1.3"
 __all__ = ["msalign", "Aligner"]
 
 
