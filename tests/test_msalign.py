@@ -172,6 +172,5 @@ class TestMSalign(object):
         signal_difference = np.sum(aligned_array) - np.sum(array)
         aligned_alignment_peak = aligned_array[0].argmax()
 
-        assert shifts_out.shape[0] == n_signals
         assert (alignment_peak - aligned_alignment_peak) <= 1
         assert signal_difference < 0.1
