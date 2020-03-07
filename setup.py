@@ -2,7 +2,9 @@
 #
 # Copyright (C) 2020 Lukasz Migas
 
-from msalign.version import __version__
+from _setup_support import get_version
+
+__version__ = get_version()
 
 DESCRIPTION = "msalign: Signal calibration and alignment by reference peaks"
 

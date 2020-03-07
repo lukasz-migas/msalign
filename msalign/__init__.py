@@ -1,6 +1,4 @@
 """Signal calibration and alignment by reference peaks - copy of MSALIGN function from MATLAB bioinformatics library."""
-from __future__ import division
-
 from typing import List
 
 import numpy as np
