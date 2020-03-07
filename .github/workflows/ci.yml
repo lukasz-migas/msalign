@@ -68,7 +68,7 @@ jobs:
           python-version: "3.8"
       - name: Change directory
         run: |
-          - cd msalign
+          cd msalign
       - name: Install
         run: |
           python setup.py develop
