@@ -5,3 +5,4 @@ include = '\.pyi?$'
 
 [tool.setuptools_scm]
 write_to = "msalign/_version.py"
+write_to_template = '__version__ = "{version}"'

@@ -51,7 +51,7 @@ if __name__ == "__main__":
         url=URL,
         download_url=DOWNLOAD_URL,
         install_requires=INSTALL_REQUIRES,
-        use_scm_version={"write_to": "msalign/_version.py", "write_to_template": '__version__ = "{version}"'},
+        use_scm_version=True,
         setup_requires=["setuptools_scm"],
         packages=PACKAGES,
         classifiers=CLASSIFIERS,
