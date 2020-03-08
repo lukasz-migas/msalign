@@ -1,0 +1,96 @@
+dist: trusty
+language: python
+cache:
+  pip: true
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+
+matrix:
+  # jobs
+  include:
+    # linux - 3.8
+    - env: Image=Linux_38
+      python: 3.8
+      dist: xenial
+    # linux - 3.7
+    - env: Image=Linux_37
+      python: 3.7
+      dist: xenial
+    # macOS - 3.7
+    - env: Image=macOS_37
+      os: osx
+      osx_image: xcode10.2
+      language: shell
+    # windows10 - 3.7
+    - env:
+        - Image=Win10_37
+        - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+      os: windows
+      language: shell
+      before_install: choco install python
+    # flake8
+    - env: TEST=flake
+      os: linux
+      python: 3.6
+      # coverage
+    - env: TEST=coverage
+      os: linux
+      python: 3.6
+  # allow failures
+  allow_failures:
+    # windows10 - 3.7
+    # fails because of TravisCI bug which prevents PyPI deployment from Windows
+    - env:
+        - Image=Win10_37
+        - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+      os: windows
+      language: shell
+      before_install: choco install python
+    # linux - 3.8
+    - env: Image=Linux_38
+      python: 3.8-dev
+      dist: xenial
+
+install:
+  - pip install --upgrade pip || pip3 install --upgrade pip
+  - pip install -r requirements.txt
+  - pip install git+https://github.com/lukasz-migas/msalign.git
+  - if [[ "${TEST}" == "flake" ]]; then
+    pip install flake8;
+    elif [ "${TEST}" == "coverage" ]; then
+    pip install codecov pytest==3.6 pytest-cov pytest-sugar pytest-travis-fold;
+    elif [ "${Image}" == "macOS_37" ]; then
+    pip install twine;
+    elif [ "${Image}" == "Win10_37" ]; then
+    pip install twine setuptools wheel;
+    fi;
+
+script:
+  - SRC_DIR=$(pwd)
+  - echo $SRC_DIR
+  - ls || dir
+  - python3 msalign/__init__.py || python msalign/__init__.py
+  - if [[ "${TEST}" == "flake" ]]; then
+    flake8;
+    elif [[ "${TEST}" == "coverage" ]]; then
+    pytest --cov;
+    fi;
+
+notifications:
+  email: false
+
+#after_success:
+#  - if [ "${TEST}" == "coverage" ]; then
+#    codecov --token=2f868dd3-c8ec-4889-8be0-c487ec37fc9e;
+#    fi
+#
+#deploy:
+#  provider: pypi
+#  user: lukasz-migas
+#  password:
+#    secure: ZPeJTWVZ2jfBTATn4Pa8jkYqo83aP8hzf5JaE/dtkOLdcAEKiqwNz3hUc4mTSuwGD3wMCWjsQC0UICQjYeA+evOn/styjcGX4iHJ4I985FmkjdjYkl2NUA4uR3jq1KYRuCy57zdN3vJc9y/eJL9w5s65erwk2oI2KXmKhNTNEu5pHL9HzVLy+s4HWdJimLnIL7LHJbg76DBVRSB6Y2dED/M6RWu1D99Xaw3d7CA5fC5X/ysRo3R6j0X0sV9yt1HMHSig1/kUSMrGEEbvPfREWMSwYDzP+Ezv/EfeCLjLiPU1SLDdAMIbiV4M+SU013W0nuM08yzRx5sMyd5qeKER9RvVE0z+Hf49aH2X3gq4tEY+GL3onPeI5wVO66jFsyaHasHtZSvOQyRGJE0HwX/a1jucGNsKUxO4UXrG4ax16JMH6G+bExMj/M7gid0KY/lu4o8bKsKN4cM4jqrBchG4VDCV0SnhqYOJTiEV+n01/psMxlrfCpKlZecZYsvZ0yeTJmZ96m6I3OsoCzNzB05lMCPfJg3oQZ5x09d0lY2nJoH1hrkZqIn65VeQ7kVYHIj0xJz1FCs5CRMeGg3nwhfeabFjxHaZAuT+7jnPH9Xi4Ztd9x+kWWSCrFhb3/id9VvxeWwT2HD/+oU3c4+qAFOXhGxEomODmifx/zW4t96pkwM=
+#  distributions: "sdist bdist_wheel --universal"
+#  skip_existing: true
+#  skip_cleanup: true

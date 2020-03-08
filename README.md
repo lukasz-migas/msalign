@@ -1,8 +1,6 @@
 # msalign - signal calibration and alignment
 
-[![Build Status](https://travis-ci.com/lukasz-migas/msalign.svg?branch=master)](https://travis-ci.com/lukasz-migas/msalign)
-[![CircleCI](https://circleci.com/gh/lukasz-migas/msalign.svg?style=svg)](https://circleci.com/gh/lukasz-migas/msalign)
-[![Build status](https://ci.appveyor.com/api/projects/status/0qwrkq86qg24y5un?svg=true)](https://ci.appveyor.com/project/lukasz-migas/msalign)
+![Tests](https://github.com/lukasz-migas/msalign/workflows/Tests/badge.svg?branch=dev)
 [![codecov](https://codecov.io/gh/lukasz-migas/msalign/branch/master/graph/badge.svg)](https://codecov.io/gh/lukasz-migas/msalign)
 [![Requirements Status](https://requires.io/github/lukasz-migas/msalign/requirements.svg?branch=master)](https://requires.io/github/lukasz-migas/msalign/requirements/?branch=master)
 [![CodeFactor](https://www.codefactor.io/repository/github/lukasz-migas/msalign/badge)](https://www.codefactor.io/repository/github/lukasz-migas/msalign)
@@ -18,15 +16,24 @@ allows alignment of multiple signals to reference peaks.
 
 ## Installation
 
+Install from PyPi 
+
 ```python
 pip install msalign
 ```
 
-or
+Install directly from GitHub
 
 ```python
-pip install git+https://github.com/lukasz-migas/msalign.git
+pip install -e git+https://github.com/lukasz-migas/msalign.git
 ```
+
+Install in development mode
+
+```python
+python setup.py develop
+```
+
 
 ## Usage
 
@@ -38,8 +45,8 @@ import numpy as np
 from msalign import msalign
 
 
-fname = r"./example_data/msalign_test_data.csv"
-data = np.genfromtxt(fname, delimiter=",")
+filename = r"./example_data/msalign_test_data.csv"
+data = np.genfromtxt(filename, delimiter=",")
 xvals = data[1:, 0]
 zvals = data[1:, 1:].T
 
@@ -51,6 +58,7 @@ kwargs = dict(
     grid_steps=20,
     ratio=2.5,
     shift_range=[-100, 100],
+    only_shift=False
     )
 
 zvals_new = msalign(xvals, zvals, peaks, **kwargs)
