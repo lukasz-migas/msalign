@@ -119,3 +119,4 @@ misc/COMMANDS
 .project
 .pydevproject
 .settings/org.eclipse.ltk.core.refactoring.prefs
+/msalign/_version.py

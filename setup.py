@@ -2,9 +2,7 @@
 #
 # Copyright (C) 2020 Lukasz Migas
 
-from _setup_support import get_version, read_requirements
-
-__version__ = get_version()
+from _setup_support import read_requirements
 
 DESCRIPTION = "msalign: Signal calibration and alignment by reference peaks"
 
@@ -51,10 +49,9 @@ if __name__ == "__main__":
         long_description_content_type="text/markdown",
         license=LICENSE,
         url=URL,
-        version=__version__,
         download_url=DOWNLOAD_URL,
         install_requires=INSTALL_REQUIRES,
-        use_scm_version=True,
+        use_scm_version={"write_to": "msalign/_version.py", "write_to_template": '__version__ = "{version}"'},
         setup_requires=["setuptools_scm"],
         packages=PACKAGES,
         classifiers=CLASSIFIERS,
