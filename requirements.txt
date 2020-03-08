@@ -1,1 +1,2 @@
--r requirements/requirements-std.txt
+mkdocs==1.1
+mkdocs-material==4.6.3
