@@ -2,8 +2,7 @@
 #
 # Copyright (C) 2020 Lukasz Migas
 
-from _setup_support import get_version
-from _setup_support import read_requirements
+from _setup_support import get_version, read_requirements
 
 __version__ = get_version()
 
@@ -55,6 +54,8 @@ if __name__ == "__main__":
         version=__version__,
         download_url=DOWNLOAD_URL,
         install_requires=INSTALL_REQUIRES,
+        use_scm_version=True,
+        setup_requires=["setuptools_scm"],
         packages=PACKAGES,
         classifiers=CLASSIFIERS,
         package_dir={"msalign": "msalign"},

@@ -2,3 +2,6 @@
 line-length = 120
 target-version = ['py36', 'py37', 'py38']
 include = '\.pyi?$'
+
+[tool.setuptools_scm]
+write_to = "msalign/_version.py"

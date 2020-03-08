@@ -110,16 +110,12 @@ jobs:
         uses: pypa/gh-action-pypi-publish@master
         if: success()
         with:
-          user: ${{ secrets.pypi_token }}
+          user: __token__
           password: ${{ secrets.pypi_test_password }}
           repository_url: https://test.pypi.org/legacy/
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@master
         if: success() && github.ref == 'refs/heads/master'
         with:
-          user: ${{ secrets.pypi_token }}
+          user: __token__
           password: ${{ secrets.pypi_password }}
-      - name: Finished deployment
-        if: always()
-        run: |
-          echo "Deployed"

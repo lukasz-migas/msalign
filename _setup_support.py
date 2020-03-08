@@ -1,6 +1,6 @@
 # Standard library imports
-from typing import List
 import re
+from typing import List
 
 
 def get_version():
