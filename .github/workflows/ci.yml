@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip  # || pip3 install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements/requirements-std.txt
           pip install flake8
       - name: Change directory
         run: |
@@ -52,6 +52,26 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
 
+  coverage:
+    name: "Coverage"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements/requirements-std.txt
+          pip install -r requirements/requirements-dev.txt
+      - name: Test with pytest
+        run: |
+          pytest --cov=msalign
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+
   install-dev:
     strategy:
       max-parallel: 4
@@ -72,6 +92,7 @@ jobs:
           python -c 'import msalign; print(msalign.__version__)'
 
   deploy:
+    name: "Deploy"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -82,7 +103,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip  # || pip3 install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements/requirements-std.txt
           pip install -r requirements/requirements-deploy.txt
       - name: Build package
         run: |
@@ -91,12 +112,12 @@ jobs:
         uses: pypa/gh-action-pypi-publish@master
         if: success()
         with:
-          user: lukasz-migas
+          user: ${{ secrets.pypi_token }}
           password: ${{ secrets.pypi_test_password }}
           repository_url: https://test.pypi.org/legacy/
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@master
         if: success() && github.ref == 'refs/heads/master'
         with:
-          user: lukasz-migas
+          user: ${{ secrets.pypi_token }}
           password: ${{ secrets.pypi_password }}

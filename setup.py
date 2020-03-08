@@ -3,6 +3,7 @@
 # Copyright (C) 2020 Lukasz Migas
 
 from _setup_support import get_version
+from _setup_support import read_requirements
 
 __version__ = get_version()
 
@@ -17,7 +18,7 @@ MAINTAINER_EMAIL = "lukas.migas@yahoo.com"
 URL = "https://github.com/lukasz-migas/msalign"
 LICENSE = "Apache license 2.0"
 DOWNLOAD_URL = "https://github.com/lukasz-migas/msalign"
-INSTALL_REQUIRES = ["numpy>=1.9.3", "scipy>=0.14.0"]
+INSTALL_REQUIRES = read_requirements("requirements/requirements-std.txt")
 
 PACKAGES = ["msalign"]
 
