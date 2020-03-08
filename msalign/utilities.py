@@ -1,7 +1,9 @@
+# Standard library imports
 import time
 import warnings
 from typing import Union
 
+# Third-party imports
 import numpy as np
 import scipy.interpolate as interpolate
 

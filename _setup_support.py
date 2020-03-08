@@ -1,19 +1,17 @@
 # Standard library imports
-import re
 from typing import List
 
+# Local imports
+import versioneer
 
-def get_version():
-    version_file = "msalign/_version.py"
-    ver_str_line = open(version_file, "rt").read()
-    ver_str_raw = r"^version = ['\"]([^'\"]*)['\"]"
-    mo = re.search(ver_str_raw, ver_str_line, re.M)
-    if mo:
-        ver_str_raw = mo.group(1)
-    else:
-        raise RuntimeError("Unable to find version string in %s." % (version_file,))
 
-    return ver_str_raw
+def get_version() -> str:
+    """The version of imimspy currently checked out
+
+    Returns:
+        version : str
+    """
+    return versioneer.get_version()
 
 
 def read_requirements(path: str) -> List:

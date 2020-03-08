@@ -1,9 +1,11 @@
 """Test functions"""
+# Third-party imports
 import numpy as np
 import pytest
 from scipy import signal
 from scipy.ndimage import shift
 
+# Local imports
 import msalign
 
 

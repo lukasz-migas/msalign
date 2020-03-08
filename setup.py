@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2020 Lukasz Migas
 
+# Local imports
+from _setup_support import get_version
 from _setup_support import read_requirements
 
 DESCRIPTION = "msalign: Signal calibration and alignment by reference peaks"
@@ -9,7 +11,8 @@ DESCRIPTION = "msalign: Signal calibration and alignment by reference peaks"
 with open("README.md") as f:
     LONG_DESCRIPTION = f.read()
 
-DISTNAME = "msalign"
+VERSION = get_version()
+DISTRIBUTION_NAME = "msalign"
 MAINTAINER = "Lukasz Migas"
 MAINTAINER_EMAIL = "lukas.migas@yahoo.com"
 URL = "https://github.com/lukasz-migas/msalign"
@@ -39,7 +42,7 @@ except ImportError:
 if __name__ == "__main__":
 
     setup(
-        name=DISTNAME,
+        name=DISTRIBUTION_NAME,
         author=MAINTAINER,
         author_email=MAINTAINER_EMAIL,
         maintainer=MAINTAINER,
@@ -48,11 +51,10 @@ if __name__ == "__main__":
         long_description=LONG_DESCRIPTION,
         long_description_content_type="text/markdown",
         license=LICENSE,
+        version=VERSION,
         url=URL,
         download_url=DOWNLOAD_URL,
         install_requires=INSTALL_REQUIRES,
-        use_scm_version=True,
-        setup_requires=["setuptools_scm"],
         packages=PACKAGES,
         classifiers=CLASSIFIERS,
         package_dir={"msalign": "msalign"},
