@@ -9,7 +9,7 @@ pip install msalign
 If you upgrading, use this one:
 
 ```python
-pip install --upgrade msalign
+pip install --U msalign
 ```
 
 or if you would like the most up-to-date version, use:
