@@ -91,12 +91,12 @@ jobs:
         uses: pypa/gh-action-pypi-publish@master
         if: success()
         with:
-          user: __token__
+          user: lukasz-migas
           password: ${{ secrets.pypi_test_password }}
           repository_url: https://test.pypi.org/legacy/
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@master
         if: success() && github.ref == 'refs/heads/master'
         with:
-          user: __token__
+          user: lukasz-migas
           password: ${{ secrets.pypi_password }}
