@@ -48,9 +48,7 @@ jobs:
           pip install -r requirements/requirements-dev.txt
       - name: Test with pytest
         run: |
-          pytest --cov=msalign
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+          pytest .
 
   coverage:
     name: "Coverage"
@@ -121,3 +119,7 @@ jobs:
         with:
           user: ${{ secrets.pypi_token }}
           password: ${{ secrets.pypi_password }}
+      - name: Finished deployment
+        if: always()
+        run: |
+          echo "Deployed"

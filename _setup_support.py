@@ -36,6 +36,7 @@ def read_requirements(path: str) -> List:
             return None
         if line.startswith("-e"):
             return line
+        return line
 
     # read requirements
     _install = get_file_contents(path)
