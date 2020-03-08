@@ -1,4 +1,4 @@
-from msalign._version import __version__
+from msalign._version import version as __version__
 
 
 def test_version():
