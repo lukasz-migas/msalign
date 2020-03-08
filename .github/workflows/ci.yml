@@ -83,19 +83,20 @@ jobs:
         run: |
           pip install --upgrade pip  # || pip3 install --upgrade pip
           pip install -r requirements.txt
+          pip install -r requirements/requirements-deploy.txt
       - name: Build package
         run: |
           python setup.py sdist bdist_wheel --universal
-    - name: Publish to Test PyPI
-      uses: pypa/gh-action-pypi-publish@master
-      if: success()
-      with:
-        user: __token__
-        password: ${{ secrets.pypi_test_password }}
-        repository_url: https://test.pypi.org/legacy/
-    - name: Publish to PyPI
-      uses: pypa/gh-action-pypi-publish@master
-      if: success()
-      with:
-        user: __token__
-        password: ${{ secrets.pypi_password }}
+      - name: Publish to Test PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        if: success()
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_test_password }}
+          repository_url: https://test.pypi.org/legacy/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        if: success() && github.ref == 'refs/heads/master'
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
