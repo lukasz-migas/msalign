@@ -1,6 +1,6 @@
 # msalign - signal calibration and alignment
 
-![Tests](https://github.com/lukasz-migas/msalign/workflows/Tests/badge.svg?branch=dev)
+[![Tests](https://github.com/lukasz-migas/msalign/workflows/Tests/badge.svg)](https://github.com/lukasz-migas/msalign/actions)
 [![codecov](https://codecov.io/gh/lukasz-migas/msalign/branch/master/graph/badge.svg)](https://codecov.io/gh/lukasz-migas/msalign)
 [![Requirements Status](https://requires.io/github/lukasz-migas/msalign/requirements.svg?branch=master)](https://requires.io/github/lukasz-migas/msalign/requirements/?branch=master)
 [![CodeFactor](https://www.codefactor.io/repository/github/lukasz-migas/msalign/badge)](https://www.codefactor.io/repository/github/lukasz-migas/msalign)
@@ -33,7 +33,6 @@ Install in development mode
 ```python
 python setup.py develop
 ```
-
 
 ## Usage
 

@@ -108,14 +108,14 @@ jobs:
           python setup.py sdist bdist_wheel --universal
       - name: Publish to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
-        if: success()
+        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
         with:
           user: __token__
           password: ${{ secrets.pypi_test_password }}
           repository_url: https://test.pypi.org/legacy/
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@master
-        if: success() && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
         with:
           user: __token__
           password: ${{ secrets.pypi_password }}
