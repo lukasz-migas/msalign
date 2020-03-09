@@ -36,8 +36,9 @@ python setup.py develop
 
 ## Usage
 
-Usage is relatively straightforward. Simply import the function `msalign` from the package and provide `xvals`, `zvals`
-and `peaks`. Other parameters can be passed-in using `kwargs`.
+Usage is relatively straightforward. Simply import `msalign` from the package and provide `x`, `array`
+and `peaks` values. `msalign` accepts a lot of other parameters that might improve your alignment - simply provide them
+as `keyword` parameters.
 
 ```python
 import numpy as np
@@ -46,22 +47,18 @@ from msalign import msalign
 
 filename = r"./example_data/msalign_test_data.csv"
 data = np.genfromtxt(filename, delimiter=",")
-xvals = data[1:, 0]
-zvals = data[1:, 1:].T
-
+x = data[1:, 0]
+array = data[1:, 1:].T
 peaks = [3991.4, 4598, 7964, 9160]
-kwargs = dict(
-    iterations=5,
-    weights=[60, 100, 60, 100],
-    resolution=100,
-    grid_steps=20,
-    ratio=2.5,
-    shift_range=[-100, 100],
-    only_shift=False
-    )
 
-zvals_new = msalign(xvals, zvals, peaks, **kwargs)
+aligned = msalign(x, array, peaks, weights=[60, 100, 60, 100], only_shift=False)
 ```
+
+![png](site-source/img/ms-spectrum.png)
+
+Zoom-in on each peak the spectrum was aligned against
+
+![png](site-source/img/ms-peaks.png)
 
 ## Reference
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.1.8
+
+- Changed: Split the `run` command of the `Aligner` class to `run` (which computes the shift) and `align` which shifts 
+the input array to the new position.
+
 ## Version 0.1.7
 
 - New: Changed the structure of the package to be more Object-oriented. Alignment is now wrapped in its own class `Aligner` which can be directly
