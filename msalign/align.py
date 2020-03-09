@@ -2,6 +2,7 @@
 # Standard library imports
 import time
 import logging
+import warnings
 from typing import List
 
 # Third-party imports
@@ -157,6 +158,7 @@ class Aligner:
         self._reduce_range_factor = None
         self._scale_range = None
         self._search_space = None
+        self._computed = False
 
         # validate inputs
         self.validate()
@@ -296,8 +298,13 @@ class Aligner:
                 _shift = self.shift_opt[n_signal] + _scale_range * np.diff(_shift) * self._reduce_range_factor
         msg = f"Processed {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals)
         LOGGER.info(msg)
+        self._computed = True
 
-        # re-align arrays
+    def align(self):
+        """Align the signals against the computed values"""
+        if not self._computed:
+            warnings.warn("Aligning data without computing optimal alignment parameters", UserWarning)
+
         if self._quick_shift:
             self.shift()
         else:

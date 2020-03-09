@@ -23,13 +23,15 @@ markdown_extensions:
 # Extra CCS
 extra_css:
   - css/justify.css
-#  - css/changelog.css
 
 # Page layout
 nav:
   - Home: index.md
   - Installation: main/installation.md
-  - Usage: main/usage.md
+  - Examples:
+      - Mass Spectrum: examples/msalign-mass-spectrum.md
+      - Single Gaussian: examples/msalign-single-gaussian.md
+      - Multi Gaussian: examples/msalign-multi-gaussian.md
   - Reference: main/reference.md
   - Changelog: main/changelog.md
   - About: main/about.md

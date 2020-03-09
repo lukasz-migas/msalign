@@ -27,23 +27,24 @@ import numpy as np
 from msalign import msalign
 
 
-fname = r"./example_data/msalign_test_data.csv"
-data = np.genfromtxt(fname, delimiter=",")
-xvals = data[1:, 0]
-zvals = data[1:, 1:].T
-
+filename = r"./example_data/msalign_test_data.csv"
+data = np.genfromtxt(filename, delimiter=",")
+x = data[1:, 0]
+array = data[1:, 1:].T
 peaks = [3991.4, 4598, 7964, 9160]
-kwargs = dict(
-    weights=[60, 100, 60, 100],
-    only_shift=False,
-    )
 
-zvals_new = msalign(xvals, zvals, peaks, **kwargs)
+aligned = msalign(x, array, peaks, weights=[60, 100, 60, 100], only_shift=False)
 ```
+
+![png](img/ms-spectrum.png)
+
+Zoom-in on each peak the spectrum was aligned against
+
+![png](img/ms-peaks.png)
 
 ## Example alignment
 
-In the [Usage](main/usage.md) section you will find a couple of examples of signal alignment based on single or multiple
-reference peaks.
+In the [Examples](examples/msalign-mass-spectrum.md) you will find a couple of examples that showcase the performance of `msalign`
+against synthetic and real examples.
 
-![img](img/noisy_synthetic_signal_before_and_after.png)
+![png](img/multi-gaussian.png)
