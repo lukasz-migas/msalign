@@ -21,6 +21,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 class Aligner:
+    """Main alignment class"""
+
     def __init__(
         self,
         x: np.ndarray,
@@ -113,6 +115,7 @@ class Aligner:
         self.array_aligned = np.zeros_like(self.array)
         self.scale_opt = np.ones((self.n_signals, 1), dtype=np.float32)
         self.shift_opt = np.zeros((self.n_signals, 1), dtype=np.float32)
+        self.shift_values = np.zeros_like(self.shift_opt)
 
         # interpolation method
         self._method = method
@@ -220,11 +223,11 @@ class Aligner:
 
         gaussian_resolution_range = np.arange(0, self._gaussian_resolution + 1)
         for i in range(self.n_peaks):
-            left_l = self.peaks[i] - self._gaussian_ratio * gaussian_widths[i]
-            right_l = self.peaks[i] + self._gaussian_ratio * gaussian_widths[i]
+            left_l = self.peaks[i] - self._gaussian_ratio * gaussian_widths[i]  # noqa
+            right_l = self.peaks[i] + self._gaussian_ratio * gaussian_widths[i]  # noqa
             corr_sig_x[:, i] = left_l + (gaussian_resolution_range * (right_l - left_l) / self._gaussian_resolution)
             corr_sig_y[:, i] = self._weights[i] * np.exp(
-                -np.square((corr_sig_x[:, i] - self.peaks[i]) / gaussian_widths[i])
+                -np.square((corr_sig_x[:, i] - self.peaks[i]) / gaussian_widths[i])  # noqa
             )
 
         self._corr_sig_l = (self._gaussian_resolution + 1) * self.n_peaks
@@ -257,12 +260,10 @@ class Aligner:
         t_start = time.time()
 
         _scale_range = np.array([-0.5, 0.5])
+        # main loop: searches for the optimum values of Scale and Shift factors by search over a multi-resolution
+        # grid, getting better at each iteration. Increasing the number of iterations improves the shift and scale
+        # parameters
         for n_signal, y in enumerate(self.array):
-
-            # main loop: searches for the optimum values of Scale and Shift factors by search over a multi-resolution
-            # grid, getting better at each iteration. Increasing the number of iterations improves the shift and scale
-            # parameters
-
             # set to back to the user input arguments (or default)
             _shift = self._shift_range
             _scale = self._scale_range
@@ -296,8 +297,7 @@ class Aligner:
                 # readjust grid for next iteration_reduce_range_factor
                 _scale = self.scale_opt[n_signal] + _scale_range * np.diff(_scale) * self._reduce_range_factor
                 _shift = self.shift_opt[n_signal] + _scale_range * np.diff(_shift) * self._reduce_range_factor
-        msg = f"Processed {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals)
-        LOGGER.info(msg)
+        LOGGER.debug(f"Processed {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals))
         self._computed = True
 
     def align(self):
@@ -312,7 +312,7 @@ class Aligner:
 
         # return aligned data and shifts
         if self._return_shifts:
-            return self.array_aligned, self.shift_opt
+            return self.array_aligned, self.shift_values
 
         # only return data
         return self.array_aligned
@@ -338,9 +338,9 @@ class Aligner:
             # interpolate back to the original domain
             fcn = generate_function(self._method, (self.x - shift_opt[iteration]) / scale_opt[iteration], y)
             self.array_aligned[iteration] = np.nan_to_num(fcn(self.x))
+        self.shift_values = self.shift_opt
 
-        msg = f"Re-aligned {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals)
-        LOGGER.info(msg)
+        LOGGER.debug(f"Re-aligned {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals))
 
     def shift(self, shift_opt=None):
         """Quickly shift array based on the optimized shift parameters
@@ -352,12 +352,11 @@ class Aligner:
         """
         t_start = time.time()
         if shift_opt is None:
-            shift_opt = np.round(self.shift_opt, 0).astype(np.int32)
+            shift_opt = np.round(self.shift_opt).astype(np.int32)
 
         # quickly shift based on provided values
         for iteration, y in enumerate(self.array):
             self.array_aligned[iteration] = shift(y, -int(shift_opt[iteration]))
+        self.shift_values = shift_opt
 
-        msg = f"Re-aligned {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals)
-        print(msg)
-        LOGGER.debug(msg)
+        LOGGER.debug(f"Re-aligned {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals))

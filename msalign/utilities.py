@@ -1,7 +1,8 @@
+"""Various utilities used by the library"""
 # Standard library imports
 import time
 import warnings
-from typing import Union
+from typing import List, Union
 
 # Third-party imports
 import numpy as np
@@ -150,7 +151,7 @@ def find_nearest_index(x: np.ndarray, value: Union[float, int]):
     return np.argmin(np.abs(x - value))
 
 
-def convert_peak_values_to_index(x: np.ndarray, peaks):
+def convert_peak_values_to_index(x: np.ndarray, peaks) -> List:
     """Converts non-integer peak values to index value by finding
     the nearest value in the `xvals` array.
 
