@@ -2,7 +2,8 @@
 # Standard library imports
 import time
 import warnings
-from typing import List, Union
+from typing import List
+from typing import Union
 
 # Third-party imports
 import numpy as np

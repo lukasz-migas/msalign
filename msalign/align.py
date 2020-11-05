@@ -209,6 +209,12 @@ class Aligner:
                 " index which is not calculated correctly when using `true` x-axis values."
             )
 
+    def _set_attr(self, attr: str, new_value, current_value):
+        """Set attribute on the alignment class while ignoring the request if the value is ``None``"""
+        if new_value is None or new_value == current_value:
+            return
+        setattr(self, attr, new_value)
+
     def prepare(self):
         """Prepare dataset for alignment"""
         t_start = time.time()
@@ -238,7 +244,7 @@ class Aligner:
         # the previous range if grid_steps < 10
         self._reduce_range_factor = min(0.5, 5 / self._grid_steps)
 
-        # set scl such that the maximum peak can shift no more than the limits imposed by shft when scaling
+        # set scl such that the maximum peak can shift no more than the limits imposed by shift when scaling
         self._scale_range = 1 + self._shift_range / max(self.peaks)
 
         if self._only_shift:
@@ -254,8 +260,9 @@ class Aligner:
         )
         LOGGER.debug(f"Prepared in {format_time(time.time() - t_start)}")
 
-    def run(self):
+    def run(self, n_iterations: int = None):
         """Execute the alignment procedure for each signal in the 2D array and collate the shift/scale vectors"""
+        self._set_attr("_n_iterations", n_iterations, self._n_iterations)
         # iterate for every signal
         t_start = time.time()
 
@@ -300,10 +307,12 @@ class Aligner:
         LOGGER.debug(f"Processed {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals))
         self._computed = True
 
-    def align(self):
+    def align(self, quick_shift: bool = None, return_shifts: bool = None):
         """Align the signals against the computed values"""
         if not self._computed:
             warnings.warn("Aligning data without computing optimal alignment parameters", UserWarning)
+        self._set_attr("_quick_shift", quick_shift, self._quick_shift)
+        self._set_attr("_return_shifts", return_shifts, self._return_shifts)
 
         if self._quick_shift:
             self.shift()
