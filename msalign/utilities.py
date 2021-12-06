@@ -5,9 +5,9 @@ import warnings
 from typing import List
 from typing import Union
 
-# Third-party imports
 import numpy as np
 import scipy.interpolate as interpolate
+# Third-party imports
 
 
 def format_time(value: float) -> str:

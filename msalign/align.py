@@ -1,20 +1,20 @@
 """Main alignment class"""
 # Standard library imports
-import time
 import logging
+import time
 import warnings
 from typing import List
 
-# Third-party imports
 import numpy as np
 
-# Local imports
-from msalign.utilities import shift
 from msalign.utilities import check_xy
-from msalign.utilities import time_loop
+from msalign.utilities import convert_peak_values_to_index
 from msalign.utilities import format_time
 from msalign.utilities import generate_function
-from msalign.utilities import convert_peak_values_to_index
+from msalign.utilities import shift
+from msalign.utilities import time_loop
+# Third-party imports
+# Local imports
 
 METHODS = ["pchip", "zero", "slinear", "quadratic", "cubic", "linear"]
 LOGGER = logging.getLogger(__name__)

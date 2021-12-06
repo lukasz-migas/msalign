@@ -275,13 +275,13 @@ https://creativecommons.org/publicdomain/zero/1.0/ .
 """
 from __future__ import print_function
 
-# Standard library imports
+import errno
+import json
 import os
 import re
-import sys
-import json
-import errno
 import subprocess
+import sys
+# Standard library imports
 
 try:
     import configparser

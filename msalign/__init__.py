@@ -2,12 +2,12 @@
 # Standard library imports
 from typing import List
 
-# Third-party imports
 import numpy as np
 
-# Local imports
-from msalign.align import Aligner
 from msalign._version import __version__  # noqa
+from msalign.align import Aligner
+# Third-party imports
+# Local imports
 
 __all__ = ["msalign", "Aligner"]
 

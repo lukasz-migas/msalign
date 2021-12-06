@@ -2,16 +2,16 @@
 import numpy as np
 import pytest
 import scipy.interpolate as interpolate
-from numpy.testing import assert_equal
 from numpy.testing import assert_array_equal
+from numpy.testing import assert_equal
 
-# Local imports
-from msalign.utilities import shift
 from msalign.utilities import check_xy
+from msalign.utilities import convert_peak_values_to_index
+from msalign.utilities import find_nearest_index
 from msalign.utilities import format_time
 from msalign.utilities import generate_function
-from msalign.utilities import find_nearest_index
-from msalign.utilities import convert_peak_values_to_index
+from msalign.utilities import shift
+# Local imports
 
 
 class TestShift:
@@ -57,7 +57,7 @@ class TestFindNearestIndex(object):
 
 
 class TestConvertPeaksToIndex(object):
-    """Test """
+    """Test"""
 
     @staticmethod
     def test_convert_peak_values_to_index():
