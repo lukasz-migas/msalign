@@ -35,7 +35,21 @@ nav:
   - About: main/about.md
 
 theme:
+  name: material
   language: en
+  features:
+    - content.code.annotate
+    - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+  font:
+    text: Roboto
+    code: Roboto Mono
   palette:
     - scheme: default
       toggle:
