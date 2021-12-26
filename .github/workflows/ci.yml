@@ -3,33 +3,31 @@ name: Tests
 on: [push]
 
 jobs:
-  style:
+  code:
+    name: Code
     runs-on: ubuntu-latest
-    name: "Verify code style"
-
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [flake8, black, isort]
     steps:
-      - uses: actions/checkout@master
-      - name: Set up Python
-        uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8
       - name: Install dependencies
         run: |
-          pip install --upgrade pip  # || pip3 install --upgrade pip
-          pip install -e .
-          pip install flake8
-      - name: Change directory
-        run: |
-          cd msalign
-      - name: Lint with flake8
-        run: |
-          flake8 msalign
+          pip install --upgrade pip
+          pip install tox
+      - name: Run task
+        run: tox -e ${{ matrix.task }}
 
   tests:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8, 3.9, 3.10]
+        python-version: [3.7, 3.8, 3.9]
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     runs-on: ${{ matrix.os }}
