@@ -16,7 +16,7 @@ allows alignment of multiple signals to reference peaks.
 
 ## Installation
 
-Install from PyPi 
+Install from PyPi
 
 ```python
 pip install msalign

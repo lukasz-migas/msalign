@@ -5,8 +5,8 @@ import pytest
 from scipy import signal
 from scipy.ndimage import shift
 
-# Local imports
 import msalign
+# Local imports
 
 
 @pytest.fixture
