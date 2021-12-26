@@ -54,11 +54,11 @@ peaks = [3991.4, 4598, 7964, 9160]
 aligned = msalign(x, array, peaks, weights=[60, 100, 60, 100], only_shift=False)
 ```
 
-![png](site-source/img/ms-spectrum.png)
+![png](docs/img/ms-spectrum.png)
 
 Zoom-in on each peak the spectrum was aligned against
 
-![png](site-source/img/ms-peaks.png)
+![png](docs/img/ms-peaks.png)
 
 ## Reference
 

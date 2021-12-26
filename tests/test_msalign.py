@@ -6,7 +6,6 @@ from scipy import signal
 from scipy.ndimage import shift
 
 import msalign
-# Local imports
 
 
 @pytest.fixture
@@ -16,7 +15,7 @@ def data():
     return x, array
 
 
-class TestMSalign(object):
+class TestMSalign:
     """Test msalign"""
 
     @staticmethod

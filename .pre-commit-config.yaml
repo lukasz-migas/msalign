@@ -1,35 +1,20 @@
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+-   repo: https://github.com/pycqa/isort
+    rev: 5.8.0
     hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-docstring-first
-      - id: debug-statements
-      - id: requirements-txt-fixer
-  - repo: meta
+    - id: isort
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v2.7.4
     hooks:
-      - id: check-hooks-apply
-      - id: check-useless-excludes
-  - repo: https://github.com/psf/black
-    rev: 21.12b0
+    - id: pyupgrade
+      args: ["--py37-plus"]
+-   repo: https://github.com/python/black
+    rev: 20.8b1
     hooks:
-      - id: black
-        language_version: python3.7
-  - repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v1.5.7
+    - id: black
+      pass_filenames: true
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.4
     hooks:
-      - id: autopep8
-  - repo: https://github.com/pre-commit/pre-commit
-    rev: v2.16.0
-    hooks:
-      - id: validate_manifest
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v2.29.1
-    hooks:
-      - id: pyupgrade
-  - repo: https://github.com/asottile/reorder_python_imports
-    rev: v2.6.0
-    hooks:
-      - id: reorder-python-imports
-        language_version: python3
+    - id: flake8
+      pass_filenames: true

@@ -1,17 +1,17 @@
-# Third-party imports
+"""Utilities."""
 import numpy as np
 import pytest
 import scipy.interpolate as interpolate
-from numpy.testing import assert_array_equal
-from numpy.testing import assert_equal
+from numpy.testing import assert_array_equal, assert_equal
 
-from msalign.utilities import check_xy
-from msalign.utilities import convert_peak_values_to_index
-from msalign.utilities import find_nearest_index
-from msalign.utilities import format_time
-from msalign.utilities import generate_function
-from msalign.utilities import shift
-# Local imports
+from msalign.utilities import (
+    check_xy,
+    convert_peak_values_to_index,
+    find_nearest_index,
+    format_time,
+    generate_function,
+    shift,
+)
 
 
 class TestShift:
@@ -45,7 +45,7 @@ class TestShift:
         assert y_new[-1] == fill_value
 
 
-class TestFindNearestIndex(object):
+class TestFindNearestIndex:
     """Test find_nearest_index"""
 
     @staticmethod
@@ -56,7 +56,7 @@ class TestFindNearestIndex(object):
         assert correct_index == return_index
 
 
-class TestConvertPeaksToIndex(object):
+class TestConvertPeaksToIndex:
     """Test"""
 
     @staticmethod
@@ -69,7 +69,7 @@ class TestConvertPeaksToIndex(object):
         assert expected_idx == returned_idx
 
 
-class TestGenerateInterpolationFunction(object):
+class TestGenerateInterpolationFunction:
     """Test generate_function"""
 
     @staticmethod
@@ -85,7 +85,7 @@ class TestGenerateInterpolationFunction(object):
         assert isinstance(fcn, interpolate.interp1d)
 
 
-class TestCheckXY(object):
+class TestCheckXY:
     """Test check_xy"""
 
     @staticmethod

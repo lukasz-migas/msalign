@@ -14,6 +14,9 @@ lint:
 	isort -y
 	flake8 .
 
+pre:
+	pre-commit run -a
+
 flake:
 	flake8 .
 
