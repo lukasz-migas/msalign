@@ -6,6 +6,7 @@ import numpy as np
 
 from msalign._version import __version__  # noqa
 from msalign.align import Aligner
+
 # Third-party imports
 # Local imports
 

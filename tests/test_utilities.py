@@ -11,6 +11,7 @@ from msalign.utilities import find_nearest_index
 from msalign.utilities import format_time
 from msalign.utilities import generate_function
 from msalign.utilities import shift
+
 # Local imports
 
 

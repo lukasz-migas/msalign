@@ -7,6 +7,7 @@ from typing import Union
 
 import numpy as np
 import scipy.interpolate as interpolate
+
 # Third-party imports
 
 

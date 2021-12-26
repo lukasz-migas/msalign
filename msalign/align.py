@@ -13,6 +13,7 @@ from msalign.utilities import format_time
 from msalign.utilities import generate_function
 from msalign.utilities import shift
 from msalign.utilities import time_loop
+
 # Third-party imports
 # Local imports
 
