@@ -1,5 +1,4 @@
 """Main alignment class"""
-# Standard library imports
 import logging
 import time
 import warnings
@@ -7,14 +6,7 @@ from typing import List
 
 import numpy as np
 
-from msalign.utilities import check_xy
-from msalign.utilities import convert_peak_values_to_index
-from msalign.utilities import format_time
-from msalign.utilities import generate_function
-from msalign.utilities import shift
-from msalign.utilities import time_loop
-# Third-party imports
-# Local imports
+from .utilities import check_xy, convert_peak_values_to_index, format_time, generate_function, shift, time_loop
 
 METHODS = ["pchip", "zero", "slinear", "quadratic", "cubic", "linear"]
 LOGGER = logging.getLogger(__name__)
@@ -174,7 +166,7 @@ class Aligner:
         """Ensures the user-set parameters are correct"""
         # check user-specified parameters
         if self._method not in METHODS:
-            raise ValueError("Method `{}` not found in the method options: {}".format(self._method, METHODS))
+            raise ValueError(f"Method `{self._method}` not found in the method options: {METHODS}")
         if not isinstance(self._weights, (list, set, np.ndarray)) or len(self._weights) != self.n_peaks:
             raise ValueError("Number of weights does not match number of peaks")
         if len(self._shift_range) != 2:

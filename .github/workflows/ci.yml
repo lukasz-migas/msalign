@@ -44,8 +44,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements/requirements-std.txt
-          pip install -r requirements/requirements-dev.txt
+          pip install ".[testing]"
       - name: Test with pytest
         run: |
           pytest .
@@ -62,8 +61,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements/requirements-std.txt
-          pip install -r requirements/requirements-dev.txt
+          pip install ".[testing]"
       - name: Test with pytest
         run: |
           pytest --cov=msalign
@@ -86,7 +84,7 @@ jobs:
           python-version: "3.7"
       - name: Install
         run: |
-          python setup.py develop
+          pip install -e .
           python -c 'import msalign; print(msalign.__version__)'
 
   deploy:
@@ -101,8 +99,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip  # || pip3 install --upgrade pip
-          pip install -r requirements/requirements-std.txt
-          pip install -r requirements/requirements-deploy.txt
+          pip install ".[deploy]"
       - name: Build package
         run: |
           python setup.py sdist bdist_wheel --universal

@@ -8,10 +8,6 @@ repo_url: https://github.com/lukasz-migas/msalign
 edit_uri: https://github.com/lukasz-migas/msalign/tree/master/site-source
 use_directory_urls: false
 
-google_analytics: ["UA-130097236-1", "https://msalign.lukasz-migas.com"]
-docs_dir: "site-source"
-site_dir: "docs"
-
 markdown_extensions:
   - admonition
   - codehilite
@@ -39,16 +35,16 @@ nav:
   - About: main/about.md
 
 theme:
-  name: material
-  # logo: 'assets/images/logo.svg'
-  # favicon: 'assets/images/favicon.ico'
-  language: "en"
-  include_sidebar: true
+  language: en
   palette:
-    primary: "blue grey"
-    accent: "deep orange"
-  feature:
-    tabs: false
+    - scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
 
 extra:
   version: 0.1.10

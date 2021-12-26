@@ -1,13 +1,10 @@
 """Various utilities used by the library"""
-# Standard library imports
 import time
 import warnings
-from typing import List
-from typing import Union
+from typing import List, Union
 
 import numpy as np
 import scipy.interpolate as interpolate
-# Third-party imports
 
 
 def format_time(value: float) -> str:

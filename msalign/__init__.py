@@ -1,13 +1,10 @@
 """Signal calibration and alignment by reference peaks - copy of MSALIGN function from MATLAB bioinformatics library."""
-# Standard library imports
 from typing import List
 
 import numpy as np
 
-from msalign._version import __version__  # noqa
-from msalign.align import Aligner
-# Third-party imports
-# Local imports
+from ._version import __version__  # noqa: F401
+from .align import Aligner
 
 __all__ = ["msalign", "Aligner"]
 
