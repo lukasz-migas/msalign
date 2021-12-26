@@ -18,11 +18,11 @@ Functions:
 
 """
 # Standard library imports
+import errno
 import os
 import re
-import sys
-import errno
 import subprocess
+import sys
 from typing import Dict
 
 # This file helps to compute a version number in source trees obtained from

@@ -1,10 +1,10 @@
 # Two Gaussian curve alignment
 
-This notebook showcases how `msalign` performs when dealing with multiple curves in the signal. 
-The algorithm performs pretty well when aliging *clean* and *noisy* data, especially when the 
+This notebook showcases how `msalign` performs when dealing with multiple curves in the signal.
+The algorithm performs pretty well when aliging *clean* and *noisy* data, especially when the
 ratio of the two curves is the same (or very similar)
 
-The algoritm is a little less capable when dealing with two curves and the alignment is performed 
+The algoritm is a little less capable when dealing with two curves and the alignment is performed
 towards the smaller curve.
 
 
@@ -33,13 +33,13 @@ def overlay_plot(ax, x, array, peak):
     ax.set_xlabel("Index", fontsize=18)
     ax.set_xlim((x[0], x[-1]))
     ax.vlines(peak, *ax.get_ylim())
-    
+
 def plot_peak(ax, x, y, peak, window=100):
     peak_idx = find_nearest_index(x, peak)
     _x = x[peak_idx-window:peak_idx+window]
     _y = y[peak_idx-window:peak_idx+window]
     ax.plot(_x, _y)
-    
+
     ax.axes.get_yaxis().set_visible(False)
     ax.set_xlim((_x[0], _x[-1]))
     ax.vlines(peak, *ax.get_ylim())
@@ -48,7 +48,7 @@ def zoom_plot(axs, x, array, aligned_array, peaks):
     for i, y in enumerate(array):
         for j, peak in enumerate(peaks):
             plot_peak(axs[0, j], x, y, peak)
-            
+
     for i, y in enumerate(aligned_array):
         for j, peak in enumerate(peaks):
             plot_peak(axs[1, j], x, y, peak)
@@ -75,9 +75,9 @@ weights = [60, 100, 60, 100]
 
 # instantiate aligner object
 aligner = Aligner(
-    x, 
-    array, 
-    peaks, 
+    x,
+    array,
+    peaks,
     weights=weights,
     return_shifts=True,
     align_by_index=True,
@@ -85,7 +85,7 @@ aligner = Aligner(
     method="pchip",
 )
 aligner.run()
-aligned_array, shifts_out = aligner.align() 
+aligned_array, shifts_out = aligner.align()
 
 # display before and after shifting
 fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(12, 10))
@@ -107,16 +107,16 @@ zoom_plot(ax, x, array, aligned_array, peaks)
 
 # Alignment improvement
 
-We can improve the alignment performance by switching the `only_shift` keyword parameter to `True`. This will 
+We can improve the alignment performance by switching the `only_shift` keyword parameter to `True`. This will
 ensure that each signal is shifted and rescaled which in practice means the `x` array is slightly altered on each iteration.
 
 
 ```python
 # instantiate aligner object
 aligner = Aligner(
-    x, 
-    array, 
-    peaks, 
+    x,
+    array,
+    peaks,
     weights=weights,
     return_shifts=True,
     align_by_index=True,
@@ -143,4 +143,3 @@ zoom_plot(ax, x, array, aligned_array, peaks)
 
 
 ![png](msalign-mass-spectrum_files/msalign-mass-spectrum_7_1.png)
-

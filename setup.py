@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #
 # Copyright (C) 2020 Lukasz Migas
-
 # Local imports
 from _setup_support import get_version
 from _setup_support import read_requirements

@@ -1,10 +1,10 @@
 # Two Gaussian curve alignment
 
-This notebook showcases how `msalign` performs when dealing with multiple curves in the signal. 
-The algorithm performs pretty well when aliging *clean* and *noisy* data, especially when the 
+This notebook showcases how `msalign` performs when dealing with multiple curves in the signal.
+The algorithm performs pretty well when aliging *clean* and *noisy* data, especially when the
 ratio of the two curves is the same (or very similar)
 
-The algoritm is a little less capable when dealing with two curves and the alignment is performed 
+The algoritm is a little less capable when dealing with two curves and the alignment is performed
 towards the smaller curve.
 
 
@@ -24,47 +24,47 @@ First, let's make a couple of functions that will generate data for us, as well 
 
 ```python
 def simple_two_gaussian_data(shifts, n_signals=5, n_points=100, noise=0):
-    """Generate two-Gaussian signal that was shifted along the horizontal axis. 
-    The proportion of the two conformations remains constant where the first conformation is 
+    """Generate two-Gaussian signal that was shifted along the horizontal axis.
+    The proportion of the two conformations remains constant where the first conformation is
     twice as large as the second
     """
     # generate x-axis
     x = np.arange(n_points)
-    
+
     # generate Gaussian signal
     gaussian_one = signal.gaussian(n_points, std=4)
     gaussian_two = shift(signal.gaussian(n_points, std=4) * 0.5, n_points * 0.2)
     gaussian = gaussian_one + gaussian_two
     peak = [gaussian_one.argmax(), gaussian_two.argmax()]
-    
+
     # pre-allocate array
     array = np.zeros((n_signals, n_points))
     for i in range(n_signals):
         array[i] = shift(gaussian, shifts[i]) + np.random.normal(0, noise, n_points)
-        
+
     return x, array, shifts, peak
 
 def variable_two_gaussian_data(shifts, n_signals=5, n_points=100, noise=0):
-    """Generate two-Gaussian signal that was shifted along the horizontal axis. 
-    The proportion of the two conformations remains constant where the first conformation is 
+    """Generate two-Gaussian signal that was shifted along the horizontal axis.
+    The proportion of the two conformations remains constant where the first conformation is
     twice as large as the second
     """
     # generate x-axis
     x = np.arange(n_points)
     gaussian_one_intensity = np.random.randint(1, 10, n_signals) / 10
     gaussian_two_intensity = np.random.randint(1, 10, n_signals) / 10
-    
+
     # generate Gaussian signal
     gaussian_one = signal.gaussian(n_points, std=4)
     gaussian_two = shift(signal.gaussian(n_points, std=4), n_points * 0.2)
     peak = [gaussian_one.argmax(), gaussian_two.argmax()]
-    
+
     # pre-allocate array
     array = np.zeros((n_signals, n_points))
     for i in range(n_signals):
         _gaussian = (gaussian_one * gaussian_one_intensity[i]) + (gaussian_two * gaussian_two_intensity[i])
         array[i] = shift(_gaussian, shifts[i]) + np.random.normal(0, noise, n_points)
-        
+
     return x, array, shifts, peak
 
 def overlay_plot(ax, x, array, peak):
@@ -76,25 +76,25 @@ def overlay_plot(ax, x, array, peak):
     ax.set_xlabel("Index", fontsize=18)
     ax.set_xlim((x[0], x[-1]))
     ax.vlines(peak, *ax.get_ylim())
-    
+
 def shift_plot(ax, shift_in, shift_out):
     """Generate plot displaying the original shifts (before alignment) and corrected shifts (after alignment)"""
     ax.plot(shift_in, label="True shift", lw=3)
     ax.plot(shift_out, label="Computed shift", lw=3)
     ax.legend()
-    
+
 def difference_plot(ax, shift_in, shift_out):
     """Generate plot displaying the misalignment for each signal"""
     ax.plot(shift_out.flatten() - shift_in.flatten(), label="Difference", lw=3)
     ax.legend()
-    
+
 def align_and_plot(x, array, shifts_in, peak, **kwargs):
     """Align signals and plot the results"""
     # instantiate aligner object
     aligner = Aligner(
-        x, 
-        array, 
-        peak, 
+        x,
+        array,
+        peak,
         return_shifts=True,
         align_by_index=True,
         only_shift=True,
@@ -215,7 +215,7 @@ align_and_plot(x, array, shifts_in, peak)
 
 # Alignment of two *random* Gaussians
 
-Here, we are aligning two Gaussians, however, the intensity of each Gaussian is not constant. 
+Here, we are aligning two Gaussians, however, the intensity of each Gaussian is not constant.
 The algorithm performs reasonably well when aligning using two peaks.
 
 
@@ -249,4 +249,3 @@ align_and_plot(x, array, shifts_in, [peak[0]])
 
 
 ![png](msalign-multi-gaussian_files/msalign-multi-gaussian_19_0.png)
-

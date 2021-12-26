@@ -1,8 +1,8 @@
 # One Gaussian curve alignment
 
-This notebook showcases how `msalign` performs when dealing with single curve in the signal. 
+This notebook showcases how `msalign` performs when dealing with single curve in the signal.
 The algorithm performs well when dealing with *clean* and *noisy* data, correctly aligning
-each signal. 
+each signal.
 
 
 ```python
@@ -24,17 +24,17 @@ def simple_one_gaussian_data(shifts, n_signals=5, n_points=100, noise=0):
     """Generate single-Gaussian signal that was shifted along the horizontal axis"""
     # generate x-axis
     x = np.arange(n_points)
-    
+
     # generate Gaussian signal
     gaussian = signal.gaussian(n_points, std=4) + np.random.normal(0, noise, n_points)
-    
+
     peak = [gaussian.argmax()]
-    
+
     # pre-allocate array
     array = np.zeros((n_signals, n_points))
     for i in range(n_signals):
         array[i] = shift(gaussian, shifts[i]) + np.random.normal(0, noise, n_points)
-        
+
     return x, array, shifts, peak
 
 def overlay_plot(ax, x, array, peak):
@@ -46,25 +46,25 @@ def overlay_plot(ax, x, array, peak):
     ax.set_xlabel("Index", fontsize=18)
     ax.set_xlim((x[0], x[-1]))
     ax.vlines(peak, *ax.get_ylim())
-    
+
 def shift_plot(ax, shift_in, shift_out):
     """Generate plot displaying the original shifts (before alignment) and corrected shifts (after alignment)"""
     ax.plot(shift_in, label="True shift", lw=3)
     ax.plot(shift_out, label="Computed shift", lw=3)
     ax.legend()
-    
+
 def difference_plot(ax, shift_in, shift_out):
     """Generate plot displaying the misalignment for each signal"""
     ax.plot(shift_out.flatten() - shift_in.flatten(), label="Difference", lw=3)
     ax.legend()
-    
+
 def align_and_plot(x, array, shifts_in, peak):
     """Align signals and plot the results"""
     # instantiate aligner object
     aligner = Aligner(
-        x, 
-        array, 
-        peak, 
+        x,
+        array,
+        peak,
         return_shifts=True,
         align_by_index=True,
         only_shift=True,
@@ -176,4 +176,3 @@ align_and_plot(x, array, shifts_in, peak)
 
 
 ![png](msalign-single-gaussian_files/msalign-single-gaussian_11_0.png)
-

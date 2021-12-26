@@ -1,8 +1,8 @@
 # Standard library imports
 from typing import List
 
-# Local imports
 import versioneer
+# Local imports
 
 
 def get_version() -> str:

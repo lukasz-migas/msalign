@@ -7,12 +7,12 @@
 ## ;;VER v0.1.9;;
 
 - ;;new;; exposed the post-alignment shift values (which might differ from `shift_opt` if the `quick_align` option is used)
-- ;;improved;; tidied up code 
+- ;;improved;; tidied up code
 
 
 ## ;;VER v0.1.8;;
 
-- ;;change;; Split the `run` command of the `Aligner` class to `run` (which computes the shift) and `align` which shifts 
+- ;;change;; Split the `run` command of the `Aligner` class to `run` (which computes the shift) and `align` which shifts
 the input array to the new position.
 
 ## ;;VER v0.1.7;;
