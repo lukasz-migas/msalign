@@ -1,3 +1,0 @@
-markdown-changelog
-mkdocs==1.1
-mkdocs-material==4.6.3
