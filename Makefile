@@ -29,3 +29,8 @@ retest:
 docs:
 	activate mkdocs
 	mkdocs serve
+
+untrack:
+	git rm -r --cached .
+	git add .
+	git commit -m ".gitignore fix"
