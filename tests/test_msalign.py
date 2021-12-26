@@ -7,8 +7,6 @@ from scipy.ndimage import shift
 
 import msalign
 
-# Local imports
-
 
 @pytest.fixture
 def data():

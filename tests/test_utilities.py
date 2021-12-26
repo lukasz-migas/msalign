@@ -1,4 +1,4 @@
-# Third-party imports
+"""Utilities."""
 import numpy as np
 import pytest
 import scipy.interpolate as interpolate
@@ -12,8 +12,6 @@ from msalign.utilities import (
     generate_function,
     shift,
 )
-
-# Local imports
 
 
 class TestShift:
