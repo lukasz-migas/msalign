@@ -1,8 +1,8 @@
 """Main alignment class"""
 import logging
 import time
+import typing as ty
 import warnings
-from typing import List
 
 import numpy as np
 
@@ -15,23 +15,26 @@ LOGGER = logging.getLogger(__name__)
 class Aligner:
     """Main alignment class"""
 
+    _method, _gaussian_ratio, _gaussian_resolution, _gaussian_width, _n_iterations = None, None, None, None, None
+    _corr_sig_l, _corr_sig_x, _corr_sig_y, _reduce_range_factor, _scale_range = None, None, None, None, None
+    _search_space, _computed = None, False
+
     def __init__(
         self,
         x: np.ndarray,
         array: np.ndarray,
-        peaks: List,
+        peaks: ty.Iterable[float],
         method: str = "cubic",
         width: int = 10,
         ratio: float = 2.5,
         resolution: int = 100,
         iterations: int = 5,
         grid_steps: int = 20,
-        shift_range: List = None,
-        weights: List = None,
+        shift_range: ty.Optional[ty.Tuple[int, int]] = None,
+        weights: ty.Optional[ty.List[float]] = None,
         return_shifts: bool = False,
         align_by_index: bool = False,
         only_shift: bool = False,
-        quick_shift: bool = False,
     ):
         """Signal calibration and alignment by reference peaks
 
@@ -109,24 +112,26 @@ class Aligner:
         self.shift_opt = np.zeros((self.n_signals, 1), dtype=np.float32)
         self.shift_values = np.zeros_like(self.shift_opt)
 
-        # interpolation method
-        self._method = method
-        # std dev of the Gaussian pulses (in X)
-        self._gaussian_width = width
-        # sets the width of the windows use at every pulse
-        self._gaussian_ratio = ratio
-        # resolution of every Gaussian pulse (number of points)
-        self._gaussian_resolution = resolution
-        # increase to improve accuracy
-        self._n_iterations = iterations
-        # size of grid for exhaustive search
-        self._grid_steps = grid_steps
-        # initial shift range
+        self.method = method
+        self.gaussian_ratio = ratio
+        self.gaussian_resolution = resolution
+        self.gaussian_width = width
+        self.n_iterations = iterations
+        self.grid_steps = grid_steps
         if shift_range is None:
             shift_range = [-100, 100]
-        self._shift_range = np.asarray(shift_range)
+        self.shift_range = shift_range
+        if weights is None:
+            weights = np.ones(self.n_peaks)
+        self.weights = weights
+
         # return shift vector
         self._return_shifts = return_shifts
+        # If the number of points is equal to 1, then only shift
+        if only_shift:
+            align_by_index = True
+        if self.n_peaks == 1:
+            only_shift = True
         # align signals by index rather than peak value
         self._align_by_index = align_by_index
         # align by index - rather than aligning to arbitrary non-integer values in the xvals, you can instead
@@ -136,67 +141,109 @@ class Aligner:
             self.x = np.arange(self.x.shape[0])
             LOGGER.debug(f"Aligning by index - peak positions: {self.peaks}")
         self._only_shift = only_shift
-        if self.n_peaks == 1:
-            self._only_shift = True
-        # weights
-        if weights is None:
-            weights = np.ones(self.n_peaks)
-        self._weights = weights
 
-        # enable quick realignment
-        self._quick_shift = quick_shift
-
-        # private attributes
-        self._corr_sig_l = None
-        self._corr_sig_x = None
-        self._corr_sig_y = None
-        self._reduce_range_factor = None
-        self._scale_range = None
-        self._search_space = None
-        self._computed = False
-
-        # validate inputs
         self.validate()
-
-        # prepare
         self.prepare()
         LOGGER.debug(f"Initialized in {format_time(time.time()-t_start)}")
+
+    @property
+    def method(self):
+        """Interpolation method."""
+        return self._method
+
+    @method.setter
+    def method(self, value: str):
+        if value not in METHODS:
+            raise ValueError(f"Method `{value}` not found in the method options: {METHODS}")
+        self._method = value
+
+    @property
+    def gaussian_ratio(self):
+        """Gaussian ratio."""
+        return self._gaussian_ratio
+
+    @gaussian_ratio.setter
+    def gaussian_ratio(self, value: float):
+        if value <= 0:
+            raise ValueError("Value of 'ratio' must be above 0!")
+        self._gaussian_ratio = value
+
+    @property
+    def gaussian_resolution(self):
+        """Gaussian resolution of every Gaussian pulse (number of points)."""
+        return self._gaussian_resolution
+
+    @gaussian_resolution.setter
+    def gaussian_resolution(self, value: float):
+        if value <= 0:
+            raise ValueError("Value of 'resolution' must be above 0!")
+        self._gaussian_resolution = value
+
+    @property
+    def gaussian_width(self):
+        """Width of the Gaussian pulse in std dev of the Gaussian pulses (in X)."""
+        return self._gaussian_width
+
+    @gaussian_width.setter
+    def gaussian_width(self, value: float):
+        self._gaussian_width = value
+
+    @property
+    def n_iterations(self):
+        """Total number of iterations - increase to improve accuracy."""
+        return self._n_iterations
+
+    @n_iterations.setter
+    def n_iterations(self, value: int):
+        if value < 1 or not isinstance(value, int):
+            raise ValueError("Value of 'iterations' must be above 0 and be an integer!")
+        self._n_iterations = value
+
+    @property
+    def grid_steps(self):
+        """Total number of iterations - increase to improve accuracy."""
+        return self._grid_steps
+
+    @grid_steps.setter
+    def grid_steps(self, value: int):
+        if value < 1 or not isinstance(value, int):
+            raise ValueError("Value of 'iterations' must be above 0 and be an integer!")
+        self._grid_steps = value
+
+    @property
+    def shift_range(self):
+        """Total number of iterations - increase to improve accuracy."""
+        return self._shift_range
+
+    @shift_range.setter
+    def shift_range(self, value: ty.Tuple[float, float]):
+        if len(value) != 2:
+            raise ValueError(
+                "Number of 'shift_values' is not correct. Shift range accepts" " numpy array with two values."
+            )
+        if np.diff(value) == 0:
+            raise ValueError("Values of 'shift_values' must not be the same!")
+        self._shift_range = np.asarray(value)
+
+    @property
+    def weights(self):
+        """Total number of iterations - increase to improve accuracy."""
+        return self._weights
+
+    @weights.setter
+    def weights(self, value: ty.Optional[ty.Iterable[float]]):
+        if value is None:
+            value = np.ones(self.n_peaks)
+        if not isinstance(value, ty.Iterable) or len(value) != self.n_peaks:
+            raise ValueError("Number of weights does not match number of peaks")
+        self._weights = value
 
     def validate(self):
         """Ensures the user-set parameters are correct"""
         # check user-specified parameters
-        if self._method not in METHODS:
-            raise ValueError(f"Method `{self._method}` not found in the method options: {METHODS}")
-        if not isinstance(self._weights, (list, set, np.ndarray)) or len(self._weights) != self.n_peaks:
-            raise ValueError("Number of weights does not match number of peaks")
-        if len(self._shift_range) != 2:
+        if self._only_shift and not self._align_by_index:
             raise ValueError(
-                "Number of 'shift_values' is not correct. Shift range accepts" " numpy array with two values."
-            )
-        if np.diff(self._shift_range) == 0:
-            raise ValueError("Values of 'shift_values' must not be the same!")
-        if self._gaussian_ratio <= 0:
-            raise ValueError("Value of 'ratio' must be above 0!")
-        if self._n_iterations <= 0 or isinstance(self._n_iterations, float):
-            raise ValueError("Value of 'iterations' must be above 0 and be an integer!")
-        if self._grid_steps <= 0:
-            raise ValueError("Value of 'grid_steps' must be above 0!")
-        if self._gaussian_resolution <= 0:
-            raise ValueError("Value of 'resolution' must be above 0!")
-        if not isinstance(self._only_shift, bool):
-            raise ValueError("Value of 'only_shift' must be a boolean")
-        if not isinstance(self._return_shifts, bool):
-            raise ValueError("Value of 'return_shift' must be a boolean")
-        if not isinstance(self._align_by_index, bool):
-            raise ValueError("Value of 'align_by_index' must be a boolean")
-        if self._quick_shift and not self._only_shift:
-            raise ValueError(
-                "Cannot set `quick_shift` with rescaling since quick shift is accomplished by simply"
-                " moving spectra along the axis without interpolation"
-            )
-        if self._quick_shift and not self._align_by_index:
-            raise ValueError(
-                "Cannot set `quick_shift` without also setting the `align_by_index` to `True`. Quick shift"
+                "Cannot set `only_shift` without also setting the `align_by_index` to `True`. Quick shift"
                 " simply moves the spectra without interpolation so it relies on moving values by their"
                 " index which is not calculated correctly when using `true` x-axis values."
             )
@@ -209,7 +256,6 @@ class Aligner:
 
     def prepare(self):
         """Prepare dataset for alignment"""
-        t_start = time.time()
         # check that values for gaussian_width are valid
         gaussian_widths = np.zeros((self.n_peaks, 1))
         for i in range(self.n_peaks):
@@ -250,7 +296,6 @@ class Aligner:
         self._search_space = np.tile(
             np.vstack([mesh_a.flatten(order="F"), mesh_b.flatten(order="F")]).T, [1, self._n_iterations]
         )
-        LOGGER.debug(f"Prepared in {format_time(time.time() - t_start)}")
 
     def run(self, n_iterations: int = None):
         """Execute the alignment procedure for each signal in the 2D array and collate the shift/scale vectors"""
@@ -299,14 +344,13 @@ class Aligner:
         LOGGER.debug(f"Processed {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals))
         self._computed = True
 
-    def align(self, quick_shift: bool = None, return_shifts: bool = None):
+    def align(self, return_shifts: bool = None):
         """Align the signals against the computed values"""
         if not self._computed:
             warnings.warn("Aligning data without computing optimal alignment parameters", UserWarning)
-        self._set_attr("_quick_shift", quick_shift, self._quick_shift)
         self._set_attr("_return_shifts", return_shifts, self._return_shifts)
 
-        if self._quick_shift:
+        if self._only_shift:
             self.shift()
         else:
             self.realign()
@@ -314,7 +358,6 @@ class Aligner:
         # return aligned data and shifts
         if self._return_shifts:
             return self.array_aligned, self.shift_values
-
         # only return data
         return self.array_aligned
 
@@ -344,7 +387,9 @@ class Aligner:
         LOGGER.debug(f"Re-aligned {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals))
 
     def shift(self, shift_opt=None):
-        """Quickly shift array based on the optimized shift parameters
+        """Quickly shift array based on the optimized shift parameters.
+
+        This method does not interpolate but rather moves the data left and right without applying any scaling.
 
         Parameters
         ----------

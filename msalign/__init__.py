@@ -27,7 +27,6 @@ def msalign(
     return_shifts: bool = False,
     align_by_index: bool = False,
     only_shift: bool = False,
-    quick_shift: bool = False,
 ):
     aligner = Aligner(
         x,
@@ -44,7 +43,6 @@ def msalign(
         return_shifts=return_shifts,
         align_by_index=align_by_index,
         only_shift=only_shift,
-        quick_shift=quick_shift,
     )
     aligner.run()
     return aligner.align()

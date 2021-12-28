@@ -121,3 +121,4 @@ misc/COMMANDS
 .settings/org.eclipse.ltk.core.refactoring.prefs
 .idea/
 !.idea/watcherTasks.xml
+_version.py
