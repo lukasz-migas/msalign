@@ -128,10 +128,10 @@ class Aligner:
         # return shift vector
         self._return_shifts = return_shifts
         # If the number of points is equal to 1, then only shift
-        if only_shift:
-            align_by_index = True
         if self.n_peaks == 1:
             only_shift = True
+        if only_shift:
+            align_by_index = True
         # align signals by index rather than peak value
         self._align_by_index = align_by_index
         # align by index - rather than aligning to arbitrary non-integer values in the xvals, you can instead
