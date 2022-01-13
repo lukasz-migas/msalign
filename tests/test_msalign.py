@@ -196,7 +196,7 @@ class TestMSalign:
         # align using msalign
         aligner = msalign.Aligner(x, array, [alignment_peak], return_shifts=True, only_shift=True)
         aligner.run()
-        aligned_array, _ = aligner.align()
+        aligned_array, _ = aligner.apply()
         signal_difference = np.abs(np.sum(aligned_array) - np.sum(array))
 
         assert signal_difference < 0.1

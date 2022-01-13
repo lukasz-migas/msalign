@@ -62,7 +62,6 @@ between the signals
 
 In first instance, we simply align the signals (without rescaling `only_shift=True`). As you can see, the alignment did relatively good job of shifting each signal near its correct position, but 2/3 of the signals could be slightly improved.
 
-
 ```python
 # load data
 filename = r"D:\GitHub\msalign\example_data\msalign_test_data.csv"
@@ -85,7 +84,7 @@ aligner = Aligner(
     method="pchip",
 )
 aligner.run()
-aligned_array, shifts_out = aligner.align()
+aligned_array, shifts_out = aligner.apply()
 
 # display before and after shifting
 fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(12, 10))
@@ -110,7 +109,6 @@ zoom_plot(ax, x, array, aligned_array, peaks)
 We can improve the alignment performance by switching the `only_shift` keyword parameter to `True`. This will
 ensure that each signal is shifted and rescaled which in practice means the `x` array is slightly altered on each iteration.
 
-
 ```python
 # instantiate aligner object
 aligner = Aligner(
@@ -124,7 +122,7 @@ aligner = Aligner(
     method="pchip",
 )
 aligner.run()
-aligned_array, shifts_out = aligner.align()
+aligned_array, shifts_out = aligner.apply()
 
 # display before and after shifting
 fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(12, 10))

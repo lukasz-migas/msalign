@@ -17,7 +17,7 @@ class Aligner:
 
     _method, _gaussian_ratio, _gaussian_resolution, _gaussian_width, _n_iterations = None, None, None, None, None
     _corr_sig_l, _corr_sig_x, _corr_sig_y, _reduce_range_factor, _scale_range = None, None, None, None, None
-    _search_space, _computed, array, n_signals = None, False, None, 0
+    _search_space, _computed = None, False
 
     def __init__(
         self,
@@ -92,14 +92,17 @@ class Aligner:
         self.x = np.asarray(x)
         if array is not None:
             self.array = check_xy(self.x, np.asarray(array))
-            self.n_signals = self.array.shape[0]
+        else:
+            self.array = np.empty((0, len(self.x)))
+
+        self.n_signals = self.array.shape[0]
+        self.array_aligned = np.zeros_like(self.array)
         self.peaks = list(peaks)
 
         # set attributes
         self.n_peaks = len(self.peaks)
 
         # accessible attributes
-        self.array_aligned = np.zeros_like(self.array)
         self.scale_opt = np.ones((self.n_signals, 1), dtype=np.float32)
         self.shift_opt = np.zeros((self.n_signals, 1), dtype=np.float32)
         self.shift_values = np.zeros_like(self.shift_opt)
@@ -332,7 +335,7 @@ class Aligner:
             _shift = shift_opt + _scale_range * np.diff(_shift) * self._reduce_range_factor
         return shift_opt, scale_opt
 
-    def align(self, return_shifts: bool = None):
+    def apply(self, return_shifts: bool = None):
         """Align the signals against the computed values"""
         if not self._computed:
             warnings.warn("Aligning data without computing optimal alignment parameters", UserWarning)
@@ -341,7 +344,7 @@ class Aligner:
         if self._only_shift:
             self.shift()
         else:
-            self.realign()
+            self.align()
 
         # return aligned data and shifts
         if self._return_shifts:
@@ -349,7 +352,7 @@ class Aligner:
         # only return data
         return self.array_aligned
 
-    def realign(self, shift_opt=None, scale_opt=None):
+    def align(self, shift_opt=None, scale_opt=None):
         """Realign array based on the optimized shift and scale parameters
 
         Parameters
@@ -368,11 +371,15 @@ class Aligner:
         # realign based on provided values
         for iteration, y in enumerate(self.array):
             # interpolate back to the original domain
-            func = generate_function(self.method, (self.x - shift_opt[iteration]) / scale_opt[iteration], y)
-            self.array_aligned[iteration] = np.nan_to_num(func(self.x))
+            self.array_aligned[iteration] = self._apply(y, shift_opt[iteration], scale_opt[iteration])
         self.shift_values = self.shift_opt
 
         LOGGER.debug(f"Re-aligned {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals))
+
+    def _apply(self, y: np.ndarray, shift_value: float, scale_value: float):
+        """Apply alignment correction to array `y`."""
+        func = generate_function(self.method, (self.x - shift_value) / scale_value, y)
+        return np.nan_to_num(func(self.x))
 
     def shift(self, shift_opt=None):
         """Quickly shift array based on the optimized shift parameters.
@@ -390,7 +397,12 @@ class Aligner:
 
         # quickly shift based on provided values
         for iteration, y in enumerate(self.array):
-            self.array_aligned[iteration] = shift(y, -int(shift_opt[iteration]))
+            self.array_aligned[iteration] = self._shift(y, shift_opt[iteration])
         self.shift_values = shift_opt
 
         LOGGER.debug(f"Re-aligned {self.n_signals} signals " + time_loop(t_start, self.n_signals + 1, self.n_signals))
+
+    @staticmethod
+    def _shift(y: np.ndarray, shift_value: float):
+        """Apply shift correction to array `y`."""
+        return shift(y, -int(shift_value))

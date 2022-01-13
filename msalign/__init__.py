@@ -45,7 +45,7 @@ def msalign(
         only_shift=only_shift,
     )
     aligner.run()
-    return aligner.align()
+    return aligner.apply()
 
 
 msalign.__doc__ = Aligner.__doc__
