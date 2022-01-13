@@ -1,0 +1,18 @@
+# Top-level config
+include MANIFEST.in
+include setup.cfg
+include LICENSE
+include README.md
+
+recursive-include msalign *.pyi
+
+# explicit excludes to keep check-manifest happy and remind us that
+# these things are not being included unless we ask
+exclude conftest.py
+exclude *.md *.yml *.json *.txt
+recursive-exclude docs *
+recursive-exclude examples *
+recursive-exclude example_data *
+recursive-exclude tests *
+recursive-exclude msalign __pycache__
+recursive-exclude msalign *.pyc

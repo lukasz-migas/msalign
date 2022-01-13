@@ -2,3 +2,54 @@
 line-length = 120
 target-version = ['py36', 'py37', 'py38']
 include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.asv
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | examples
+    | dist
+    | build
+  )/
+)
+'''
+
+[tool.isort]
+line_length = 120
+profile = "black"
+
+[build-system]
+requires = [
+  "setuptools >= 42",
+  "wheel",
+  "setuptools_scm[toml]>=3.4"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "msalign/_version.py"
+
+
+[tool.check-manifest]
+ignore = [
+  ".pre-commit-config.yaml",
+  "asv.conf.json",
+  "codecov.yml",
+  "Makefile",
+  "mypy.ini",
+  "tox.ini",
+  ".deepsource.toml",
+  "*.pyi",  # added by make typestubs
+  "msalign/_version.py",  # added during build by setuptools_scm
+  "scripts/*.bat",  # scripts
+  "renovate.json",
+]

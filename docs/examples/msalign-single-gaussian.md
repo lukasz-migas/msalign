@@ -18,7 +18,6 @@ plt.style.use('ggplot')
 # Utility functions
 First, let's make a couple of functions that will generate data for us, as well as, show the results
 
-
 ```python
 def simple_one_gaussian_data(shifts, n_signals=5, n_points=100, noise=0):
     """Generate single-Gaussian signal that was shifted along the horizontal axis"""
@@ -37,6 +36,7 @@ def simple_one_gaussian_data(shifts, n_signals=5, n_points=100, noise=0):
 
     return x, array, shifts, peak
 
+
 def overlay_plot(ax, x, array, peak):
     """Generate overlay plot, showing each signal and the alignment peak(s)"""
     for i, y in enumerate(array):
@@ -47,16 +47,19 @@ def overlay_plot(ax, x, array, peak):
     ax.set_xlim((x[0], x[-1]))
     ax.vlines(peak, *ax.get_ylim())
 
+
 def shift_plot(ax, shift_in, shift_out):
     """Generate plot displaying the original shifts (before alignment) and corrected shifts (after alignment)"""
     ax.plot(shift_in, label="True shift", lw=3)
     ax.plot(shift_out, label="Computed shift", lw=3)
     ax.legend()
 
+
 def difference_plot(ax, shift_in, shift_out):
     """Generate plot displaying the misalignment for each signal"""
     ax.plot(shift_out.flatten() - shift_in.flatten(), label="Difference", lw=3)
     ax.legend()
+
 
 def align_and_plot(x, array, shifts_in, peak):
     """Align signals and plot the results"""
@@ -73,7 +76,7 @@ def align_and_plot(x, array, shifts_in, peak):
 
     # align and collect data
     aligner.run()
-    aligned_array, shifts_out = aligner.align()
+    aligned_array, shifts_out = aligner.apply()
 
     # display before and after shifting
     fig, ax = plt.subplots(2, 2, figsize=(12, 10))

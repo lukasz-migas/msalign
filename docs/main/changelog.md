@@ -1,8 +1,22 @@
 # Changelog
 
+## ;;VER v0.2.0;;
+
+This version includes breaking change. The `align` method was renamed to `apply` and the `realign` method was renamed as `apply`.
+Please update your codebase to reflect this!
+
+- ;;remove;; removed the `quick_shifts` parameter as it was not really used and the `only_shift` parameter does the job instead
+- ;;change;; the `align` method was renamed to `apply`
+- ;;change;; the `realign` method was renamed to `align`
+- ;;new;; added `compute` method which makes it possible to simply calculate the correction factors for signal that was not provided in the `array` attribute
+- ;;change;; the `array` initialization value can now be `None` and it's assumed that you plan on using the `compute` method
+- ;;new;; added `_align` and `_shift` methods that perform the correction methods. These can be handy if you are using the `compute` method
+- ;;change;; all optional parameters are now properties with appropriate data validators
+
+
 ## ;;VER v0.1.10;;
 
-- ;;new;; exposed few parameters to the `run` and `align` functions so you can update the init parameters
+- ;;new;; exposed few parameters to the `run` and `align` functions, so you can update the init parameters
 
 ## ;;VER v0.1.9;;
 
