@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-latest, windows-latest] #, macos-latest]
+        platform: [ubuntu-latest, windows-latest, macos-latest]
         python: [3.7, 3.8, 3.9]
 
     steps:
@@ -75,23 +75,23 @@ jobs:
           PLATFORM: ${{ matrix.platform }}
           TOXENV: ${{ matrix.toxenv }}
 
-  test_pip_install:
-    name: ubuntu-latest 3.8 pip install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Install this commit
-        run: |
-          # pip install this git sha directly from github
-          pip install --upgrade pip
-          pip install git+git://github.com/${{ github.repository }}.git@${{ github.sha }}#egg=msalign[testing]
-
-      - name: Test
-        run: pytest --pyargs msalign --color=yes
+#  test_pip_install:
+#    name: ubuntu-latest 3.8 pip install
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Set up Python 3.8
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: 3.8
+#
+#      - name: Install this commit
+#        run: |
+#          # pip install this git sha directly from github
+#          pip install --upgrade pip
+#          pip install git+git://github.com/${{ github.repository }}.git@${{ github.sha }}#egg=msalign[testing]
+#
+#      - name: Test
+#        run: pytest --pyargs msalign --color=yes
 
   coverage:
     name: "Coverage"
@@ -132,7 +132,7 @@ jobs:
           python -c 'import msalign; print(msalign.__version__)'
 
   deploy:
-    needs: [test, test_pip_install]
+    needs: [test]
     name: "Deploy"
     runs-on: ubuntu-latest
     steps:
