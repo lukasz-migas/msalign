@@ -132,6 +132,7 @@ jobs:
           python -c 'import msalign; print(msalign.__version__)'
 
   deploy:
+    needs: [test, test_pip_install]
     name: "Deploy"
     runs-on: ubuntu-latest
     steps:
