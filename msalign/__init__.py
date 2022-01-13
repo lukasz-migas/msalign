@@ -17,7 +17,7 @@ def msalign(
     array: np.ndarray,
     peaks: List,
     method: str = "cubic",
-    width: int = 10,
+    width: float = 10,
     ratio: float = 2.5,
     resolution: int = 100,
     iterations: int = 5,
