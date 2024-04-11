@@ -66,3 +66,17 @@ Spectrometry. In Systems Bioinformatics: An Engineering Case-Based Approach, G. 
 Artech House Publishers).
 
 [MATLAB's msalign](https://mathworks.com/help/bioinfo/ref/msalign.html)
+
+
+## Citing msalign
+
+If you find `msalign` useful in your research and wish to cite it, please use the following BibTex entry:
+
+@software{msalign2024,
+  author = {Lukasz G. Migas},
+  title = {{msalign}: Spectral alignment based on MATLAB's `msalign` function.},
+  url = {https://github.com/lukasz-migas/msalign},
+  version = {0.0},
+  year = {2023},
+}
+
