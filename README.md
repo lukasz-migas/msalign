@@ -72,11 +72,13 @@ Artech House Publishers).
 
 If you find `msalign` useful in your research and wish to cite it, please use the following BibTex entry:
 
+```
 @software{msalign2024,
   author = {Lukasz G. Migas},
   title = {{msalign}: Spectral alignment based on MATLAB's `msalign` function.},
   url = {https://github.com/lukasz-migas/msalign},
-  version = {0.0},
-  year = {2023},
+  version = {0.2.0},
+  year = {2024},
 }
+```
 
