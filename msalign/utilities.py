@@ -1,4 +1,5 @@
 """Various utilities used by the library"""
+
 import time
 import warnings
 from typing import List, Union

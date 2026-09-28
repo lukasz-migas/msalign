@@ -1,4 +1,5 @@
 """Tests."""
+
 from msalign import __version__
 
 
