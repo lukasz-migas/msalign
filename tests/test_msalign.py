@@ -1,4 +1,5 @@
 """Test functions"""
+
 import numpy as np
 import pytest
 from scipy import signal
