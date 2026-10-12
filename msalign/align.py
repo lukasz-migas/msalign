@@ -1,4 +1,5 @@
 """Main alignment class"""
+
 import logging
 import time
 import typing as ty
